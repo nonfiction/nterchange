@@ -14,9 +14,10 @@ container, database, upload directory or session was used.
 | Rendered picker scripts | Three callbacks pass | Node VM, not a browser or upload/save test |
 | Synthetic MySQL/MDB2/model/Auth | 16 checks per charset pass | `latin1` and `utf8mb4`; legacy MD5 behavior preserved |
 | Save as Draft byte preservation | 73 checks per charset pass | Real form/draft/model/MySQL path; synthetic rows, no HTTP or login |
+| Failed form insert boundary | 22 checks per charset pass | Real SQL rejection and form/model writes; zero result simulated, file-processing calls recorded, no upload or HTTP |
 | Seven isolated Composer consumers | All install and load overrides | Committed application snapshots, no site config |
 | Actual application Text constructors and inherited CRUD | 13 checks for each of seven consumers in each charset pass | Synthetic schema/content/uploads, not site data |
-| PHP 8.5 syntax | All 281 archived PHP files pass | Historical `test/` is excluded, not run |
+| PHP 8.5 syntax | All 282 archived PHP files pass | Historical `test/` is excluded, not run |
 | Pinned browser dependencies | Seven shipped files match CDN SHA-256 and pass Node syntax checks | Same Prototype/Scriptaculous versions, not a browser or security audit |
 | Secret scan | Gitleaks 8.30.1 reports no findings in archive | Does not replace manual artifact review |
 
@@ -56,6 +57,16 @@ backslashes and trailing spaces; serialized drafts retain submitted bytes.
 The same regression fails on the previous implementation in both charsets.
 Only the immediate draft-headline write changed. Normal Save still needs
 consumer HTTP tests. This test neither covers workflow nor proves browser parity.
+
+`form-insert-database.php` rejects inserts through a trigger in its owned table.
+Failed inserts return the original `false` or `0` before file processing, model
+update or post-processing hooks. A posted primary key cannot overwrite the
+existing synthetic row after rejection. The zero-result case is simulated;
+file-processing and update call recorders forward to real methods. Successful
+inserts still assign a new ID and run file processing, update and post-processing
+in order. Route/auth construction is bypassed and no multipart upload is made.
+Consumer HTTP tests must separately verify upload files and mail stay unchanged
+on insert failure. The same regression fails against the previous core.
 
 ## Consumer compatibility matrix
 
@@ -132,8 +143,9 @@ consumer root and its generated `vendor/autoload.php`, then run the installed
 package's `tests/consumer.php`.
 
 For database checks, also supply the `DB_*` variables listed in the README and
-run `tests/database.php`, `tests/draft-database.php` or
-`tests/consumer-database.php`. All three refuse database names outside
+run `tests/database.php`, `tests/draft-database.php`,
+`tests/form-insert-database.php` or `tests/consumer-database.php`.
+All four refuse database names outside
 `nterchange_v5_test_*`. Create fresh isolated schemas, one
 `latin1` and one `utf8mb4`, with no site data. The tests create and drop their
 named tables. Do not point them at an existing site's database, even a local

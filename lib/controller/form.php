@@ -530,6 +530,9 @@ class ControllerForm {
 				$model->cms_draft = 1;
 			}
 			$id = $model->insert();
+			if (!$id) {
+				return $id;
+			}
 			$this->processFiles($values, $files);
 			foreach ($files as $field=>$val) {
 				if (!in_array($field, $fields)) {
