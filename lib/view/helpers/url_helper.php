@@ -20,7 +20,7 @@ require_once 'tag_helper.php';
  * @since      	File available since Release 3.0
  */
 class urlHelper extends TagHelper {
-	function urlFor(&$controller, $params) {
+	static function urlFor(&$controller, $params) {
 		if (is_a($controller, 'NView')) {
 			$controller = &$controller->controller;
 		}
@@ -114,7 +114,7 @@ class urlHelper extends TagHelper {
 		return $this->linkTo($view->controller, $text, $href, $params);
 	}
 
-	function convertInternalLink($tpl_output, &$view) {
+	static function convertInternalLink($tpl_output, &$view) {
 		if ($view->controller->name != 'page') {
 			return $tpl_output;
 		}

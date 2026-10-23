@@ -27,7 +27,7 @@ class ValueCast extends NModel {
 	}
 
 	function castReal($val) {
-		return (real) $val;
+		return (float) $val;
 	}
 
 	function castStr($val) {

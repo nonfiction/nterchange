@@ -19,7 +19,7 @@ require_once 'app/controllers/asset_controller.php';
  * @since		3.1.12
  */
 class VersionCheckController extends AssetController {
-	var $check_version_url = 'https://raw.githubusercontent.com/nonfiction/nterchange/master/version.yml';
+	var $check_version_url = 'https://raw.githubusercontent.com/nonfiction/nterchange/main/version.yml';
 	var $check_version_interval = 86400;
 	var $cache_name = 'version_check';
 	var $cache_group = 'vcheck';
@@ -41,10 +41,10 @@ class VersionCheckController extends AssetController {
 		$cache = new Cache_Lite($options);
 		$yaml = $cache->get($this->cache_name, $this->cache_group);
 		if (empty($yaml)) {
-			include_once 'HTTP/Request.php';
-			$req = new HTTP_Request($this->check_version_url);
-			if (!PEAR::isError($req->sendRequest())) {
-				$yaml = $req->getResponseBody();
+			$req = curl_init($this->check_version_url);
+			curl_setopt_array($req, array(CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 3, CURLOPT_TIMEOUT => 5));
+			$yaml = curl_exec($req);
+			if ($yaml !== false && $yaml !== '') {
 				$cached = $cache->save($yaml, $this->cache_name, $this->cache_group);
 				if ($cached == true) {
 					NDebug::debug('Version check - data is from the web and is now cached.' , N_DEBUGTYPE_INFO);
@@ -55,6 +55,7 @@ class VersionCheckController extends AssetController {
 		} else {
 			NDebug::debug('Version check - data is from the cache.' , N_DEBUGTYPE_INFO);
 		}
+		if (!$yaml) return false;
 		require_once 'vendor/spyc.php';
 		$newest_version_info = @Spyc::YAMLLoad($yaml);
 		return $newest_version_info;

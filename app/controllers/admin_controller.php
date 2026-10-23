@@ -29,17 +29,17 @@ class AdminController extends nterchangeController {
 		$this->redirectTo(array('users', 'viewlist'));
 	}
 
-	function viewlist($parameter) {
+	function viewlist($parameter = null, $layout = true) {
 		$this->loadSubnav($parameter);
-		parent::viewlist($parameter);
+		parent::viewlist($parameter, $layout);
 	}
-	function create($parameter) {
+	function create($parameter = null, $layout = true) {
 		$this->loadSubnav($parameter);
-		parent::create($parameter);
+		parent::create($parameter, $layout);
 	}
-	function edit($parameter) {
+	function edit($parameter = null, $layout = true) {
 		$this->loadSubnav($parameter);
-		parent::edit($parameter);
+		parent::edit($parameter, $layout);
 	}
 
 	function &getDefaultModel() {

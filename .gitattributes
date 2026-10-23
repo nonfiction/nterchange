@@ -1,0 +1,5 @@
+/test export-ignore
+/vendor/Smarty/demo export-ignore
+/vendor/Smarty/unit_test export-ignore
+vendor/** -text -whitespace
+compat/pear/** -text -whitespace

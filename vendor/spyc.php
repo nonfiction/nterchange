@@ -42,7 +42,7 @@
      * @access public
      * @return void
      */
-    function YAMLNode() {
+    function __construct() {
       $this->id = uniqid('');
     }
   }
@@ -78,7 +78,7 @@
      * @return array
      * @param string $input Path of YAML file or string containing YAML
      */
-    function YAMLLoad($input) {
+    static function YAMLLoad($input) {
       $spyc = new Spyc;
       return $spyc->load($input);
     }
@@ -93,7 +93,7 @@
      * @return string
      * @param array $array PHP array
      */
-    function YAMLDump($array) {
+    static function YAMLDump($array) {
       $spyc = new Spyc;
       return $spyc->dump($array);
     }
@@ -124,6 +124,10 @@
       // Initiate some objects and values
       $base              = new YAMLNode;
       $base->indent      = 0;
+      $this->_allNodes = [$base->id => $base];
+      $this->_indentSort = [];
+      $this->_haveRefs = [];
+      $this->ref = [];
       $this->_lastIndent = 0;
       $this->_lastNode   = $base->id;
       $this->_inBlock    = false;
@@ -138,7 +142,7 @@
         } elseif ($this->_inBlock == true && empty($ifchk)) {
           $last =& $this->_allNodes[$this->_lastNode];
           $last->data[key($last->data)] .= "\n";
-        } elseif ($ifchk{0} != '#' && substr($ifchk,0,3) != '---') {
+        } elseif ($ifchk[0] != '#' && substr($ifchk,0,3) != '---') {
           // Create a new node and get its indent
           $node         = new YAMLNode;
           $node->indent = $this->_getIndent($line);

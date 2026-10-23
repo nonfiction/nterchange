@@ -44,7 +44,7 @@ class NAuth extends Auth {
 		$options['cryptType'] = 'md5';
 		$options['db_options'] = array();
 		
-		parent::Auth('MDB2', $options, array($this, 'showLogin'));
+		parent::__construct('MDB2', $options, array($this, 'showLogin'));
 		$this->setLoginCallback($this, 'loginCallBack');
 		$this->setLogoutCallback($this, 'loginCallBack');
 		if (!$this->checkAuth()) {

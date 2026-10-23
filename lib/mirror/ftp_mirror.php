@@ -20,7 +20,7 @@
  * @todo 		Delete folders.
  */
 
-class FtpMirror extends Object {
+class FtpMirror extends NObject {
 
 	function __construct() {
 

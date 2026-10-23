@@ -23,7 +23,7 @@
  * @todo 		Need to create folder path in order for this to work. Patches welcome.
  */
 
-class RsyncMirror extends Object {
+class RsyncMirror extends NObject {
 
 
 	function __construct() {

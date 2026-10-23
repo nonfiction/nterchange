@@ -20,7 +20,7 @@ require_once 'controller/inflector.php';
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.0
  */
-class NDispatcher extends Object {
+class NDispatcher extends NObject {
 	var $url = '';
 	var $params = array();
 	var $app_dir = false;
@@ -164,7 +164,7 @@ class NDispatcher extends Object {
 	function _parseURL($url='') {
 		if ($url == '/' || preg_replace('/\?.*/', '', $url) == '/index.php') {
 			$url = isset($_GET['url'])?$_GET['url']:$url;
-			if (count($_GET > 1)) {
+			if (count($_GET) > 1) {
 				$get = '';
 				foreach ($_GET as $key=>$val) {
 					if ($key != 'url')

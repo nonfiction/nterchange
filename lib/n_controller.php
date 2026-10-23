@@ -50,7 +50,7 @@ if ($dh) {
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.0
  */
-class NController extends Object {
+class NController extends NObject {
 	/**
 	 * Container for a NAuth object
 	 *
@@ -224,7 +224,7 @@ class NController extends Object {
 		$ret = false;
 		$file = NController::getIncludePath($controller);
 		if (!$file) {
-			NController::debug("Controller file not found for '$controller'", N_DEBUGTYPE_ASSET, PEAR_LOG_ERR);
+			NDebug::debug("Controller file not found for '$controller'", N_DEBUGTYPE_ASSET, PEAR_LOG_ERR, __CLASS__);
 			return $ret;
 		}
 		include_once $file;
@@ -322,7 +322,7 @@ class NController extends Object {
 		} else {
 			$url_params['action'] = $action;
 			// If there's a starting slash - assume it's a direct URL.
-			if (eregi('^/', $url_params['action'])) {
+			if (str_starts_with($url_params['action'], '/')) {
 				header('Location:' . $url_params['action']);
 				exit;
 			}

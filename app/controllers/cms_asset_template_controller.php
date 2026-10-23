@@ -39,7 +39,7 @@ class CmsAssetTemplateController extends AdminController {
 		return $ret;
 	}
 
-	function viewlist($page_template_container) {
+	function viewlist($page_template_container = null, $layout = true) {
 		$this->loadSubnav($page_template_container);
 		$this->auto_render = false;
 		$html = '';
@@ -88,11 +88,11 @@ class CmsAssetTemplateController extends AdminController {
 		parent::create($parameter);
 	}
 	
-	function edit($parameter) {
+	function edit($parameter = null, $layout = true) {
 		$this->page_template_container_id = $this->getPTCIFromId($parameter);
 		$this->set('page_template_container_id', $this->page_template_container_id);
 		$this->loadSubnav($parameter);
-		parent::edit($parameter);
+		parent::edit($parameter, $layout);
 	}
 	
 	// Get page_template_container_id from cms_asset_template_id

@@ -147,21 +147,21 @@ class AssetController extends ContentController {
 
 	}
 
-	function show($parameter) {
+	function show($parameter, $layout = true) {
 		$this->page_title = Inflector::humanize($this->name);
 		$this->loadSidebar($parameter);
-		parent::show($parameter);
+		parent::show($parameter, $layout);
 	}
 
-	function edit($parameter) {
+	function edit($parameter = null, $layout = true) {
 		$this->page_title = Inflector::humanize($this->name);
 		$this->loadSidebar($parameter);
-		parent::edit($parameter);
+		parent::edit($parameter, $layout);
 	}
 
-	function create($parameter=null) {
+	function create($parameter = null, $layout = true) {
 		$this->page_title = Inflector::humanize($this->name);
-		parent::create($parameter);
+		parent::create($parameter, $layout);
 	}
 
 	function delete($parameter) {

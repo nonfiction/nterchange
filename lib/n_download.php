@@ -33,7 +33,7 @@ require_once 'n_filesystem.php';
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.1.13
  */
-class NDownload extends Object {
+class NDownload extends NObject {
 	var $model;
 	var $field;
 	var $asset_id;
@@ -46,8 +46,9 @@ class NDownload extends Object {
 	 **/
 	function cleanUrl($url) {
 		// Clean up the URL a bit.
-		$url = str_replace(UPLOAD_DIR, '', $url);
-		$url = eregi_replace('^/', '', $url);
+		$url = parse_url($url, PHP_URL_PATH);
+		$url = preg_replace('~^' . preg_quote(UPLOAD_DIR, '~') . '/~', '', $url);
+		$url = ltrim($url, '/');
 		return $url;
 	}
 
@@ -68,9 +69,11 @@ class NDownload extends Object {
 	 * @param	array	An array from getAssetAttributes
 	 **/
 	function setAssetAttributes($url_parts) {
-		$this->model = $url_parts[0];
-		$this->field = $url_parts[1];
-		$this->asset_id = $url_parts[2];
+		if (count($url_parts) === 3 && preg_match('/^[a-z_]+$/', $url_parts[0]) && preg_match('/^[a-z_]+$/', $url_parts[1]) && ctype_digit($url_parts[2])) {
+			$this->model = $url_parts[0];
+			$this->field = $url_parts[1];
+			$this->asset_id = $url_parts[2];
+		}
 	}
 
 	/**
@@ -91,12 +94,15 @@ class NDownload extends Object {
 	function getFilePath() {
 		if (is_numeric($this->asset_id)) {
 			$object = NModel::factory($this->model);
+			if (!$object || !in_array($this->field, $object->fields(), true)) return false;
 			$object->id = $this->asset_id;
 			if ($object->find()) {
 				while ($object->fetch()) {
 					$filename = $object->{$this->field};
 				}
-				return DOCUMENT_ROOT . $filename;
+				$path = realpath(DOCUMENT_ROOT . $filename);
+				$uploads = realpath(DOCUMENT_ROOT . UPLOAD_DIR);
+				return $path && $uploads && str_starts_with($path, $uploads . '/') ? $path : false;
 			}
 		} else {
 			return false;

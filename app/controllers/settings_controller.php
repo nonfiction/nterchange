@@ -39,7 +39,7 @@ class SettingsController extends nterchangeController {
 		$this->render(array('layout'=>'default'));
 	}
 
-	function viewlist() {
+	function viewlist($parameter = null, $layout = true) {
 		$this->auto_render = false;
 		include_once 'n_quickform.php';
 		$model = &$this->getDefaultModel();
@@ -77,24 +77,24 @@ class SettingsController extends nterchangeController {
 		$this->render(array('layout'=>'default'));
 	}
 
-	function show($parameter) {
+	function show($parameter, $layout = true) {
 		$model = &$this->getDefaultModel();
 		$model->user_id = (int) $this->_auth->currentUserId();
-		return parent::show($parameter);
+		return parent::show($parameter, $layout);
 	}
 
-	function edit($parameter) {
+	function edit($parameter = null, $layout = true) {
 		$model = &$this->getDefaultModel();
 		$model->user_id = (int) $this->_auth->currentUserId();
 		$this->flash->set('notice', 'Your preference has been saved.');
-		return parent::edit($parameter);
+		return parent::edit($parameter, $layout);
 	}
 
-	function create($parameter) {
+	function create($parameter = null, $layout = true) {
 		$model = &$this->getDefaultModel();
 		$model->user_id = (int) $this->_auth->currentUserId();
 		$this->flash->set('notice', 'Your preference has been saved.');
-		return parent::create($parameter);
+		return parent::create($parameter, $layout);
 	}
 
 	function getSettingDescription($setting) {

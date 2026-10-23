@@ -37,11 +37,9 @@ class WorkflowUsersController extends AppController {
 		$model = &$this->getDefaultModel();
 		if (isset($_POST['_referer'])) unset($_POST['_referer']);
 		if ($this->insert()) {
-			require_once 'vendor/JSON.php';
-			$json = new Services_JSON();
 			if ($html = $this->loadUser($model->{$model->primaryKey()})) {
 				$data = array('id'=>$model->{$model->primaryKey()}, 'data'=>$html);
-				print 'result = ' . $json->encode($data);
+				print 'result = ' . json_encode($data);
 			}
 		}
 	}

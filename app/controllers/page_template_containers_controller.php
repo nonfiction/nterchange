@@ -26,7 +26,7 @@ class PageTemplateContainersController extends AdminController {
 		parent::__construct();
 	}
 
-	function viewlist($page_template_id) {
+	function viewlist($page_template_id = null, $layout = true) {
 		$this->loadSubnav($page_template_id);
 		$this->auto_render = false;
 		$html = '';
@@ -64,11 +64,11 @@ class PageTemplateContainersController extends AdminController {
 		parent::create($parameter);
 	}
 	
-	function edit($parameter) {
+	function edit($parameter = null, $layout = true) {
 		$this->page_template_id = $this->getPTIFromId($parameter);
 		$this->set('page_template_id', $this->page_template_id);
 		$this->loadSubnav($parameter);
-		parent::edit($parameter);
+		parent::edit($parameter, $layout);
 	}
 	
 	// Get page_template_id from page_template_container_id.

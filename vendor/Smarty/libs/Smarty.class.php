@@ -1,4 +1,5 @@
 <?php
+// PHP 8 compatibility changes by nonfiction, 2026-10-23. See THIRD_PARTY.md.
 
 /**
  * Project:     Smarty: the PHP compiling template engine
@@ -565,7 +566,7 @@ class Smarty
     /**
      * The class constructor.
      */
-    function Smarty()
+    function __construct()
     {
       $this->assign('SCRIPT_NAME', isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME']
                     : @$GLOBALS['HTTP_SERVER_VARS']['SCRIPT_NAME']);

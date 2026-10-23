@@ -25,15 +25,14 @@ class CodeCallerController extends AssetController {
 		parent::__construct();
 	}
 
-	function render($options) {
+	function render($options = array()) {
 		$in_nterchange = defined('IN_NTERCHANGE')?constant('IN_NTERCHANGE'):false;
 		$in_surftoedit = defined('IN_SURFTOEDIT')?constant('IN_SURFTOEDIT'):false;
 		if (!$in_nterchange || $in_surftoedit) {
 			$model = &$this->getDefaultModel();
 			$content = $model->content;
-			require_once 'vendor/JSON.php';
-			$json = new Services_JSON();
-			if ($code = $json->decode($content) && !empty($code)) {
+			$code = json_decode($content);
+			if (!empty($code)) {
 				if (isset($code->controller) && isset($code->action)) {
 					$this->getContent((array) $code, $model->dynamic);
 				}
@@ -60,7 +59,6 @@ class CodeCallerController extends AssetController {
 			}
 			$model->content = $content;
 			$this->set($model->toArray());
-			unset($json);
 		}
 		return parent::render($options);
 	}

@@ -47,7 +47,7 @@ class WorkflowGroupController extends nterchangeController {
 	}
 
 	// specialized list for workflow (integrated ajax for workflow users)
-	function viewlist($parameter=null) {
+	function viewlist($parameter = null, $layout = true) {
 		$this->auto_render = false;
 		$wusers_ctrl = &NController::singleton('workflow_users');
 		include_once 'controller/form.php';

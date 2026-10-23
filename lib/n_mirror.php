@@ -22,7 +22,7 @@ require_once 'mirror/rsync_mirror.php';
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.1.16
  */
-class NMirror extends Object {
+class NMirror extends NObject {
 	
 	function __construct() {
 

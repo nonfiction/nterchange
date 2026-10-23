@@ -46,7 +46,7 @@ class WorkflowController extends nterchangeController {
 		$this->redirectTo(array('dashboard'));
 	}
 
-	function viewlist() {
+	function viewlist($parameter = null, $layout = true) {
 		$this->redirectTo(array('dashboard'));
 	}
 

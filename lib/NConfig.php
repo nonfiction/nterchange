@@ -15,6 +15,9 @@ class NConfig {
    */
   public static $protectedPages = array(1, 4);
 
+  // Consumers with a narrower audit history set this in site configuration.
+  public static $auditTrailMinYear = 2001;
+
   /**
    * load environment variables from a json file
    *

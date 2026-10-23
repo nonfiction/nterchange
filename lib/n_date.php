@@ -24,8 +24,8 @@ require_once 'Date.php';
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.0
  */
-class NDate extends Object {
-	function &getClientTZ() {
+class NDate extends NObject {
+	static function &getClientTZ() {
 		// if SITE_TIME_ZONE is present, use it, otherwise, best guess as to server's local time zone
 		if (defined('SITE_TIME_ZONE') && Date_TimeZone::isValidID(SITE_TIME_ZONE)) {
 			$client_tz = new Date_TimeZone(SITE_TIME_ZONE);
@@ -35,7 +35,7 @@ class NDate extends Object {
 		return $client_tz;
 	}
 
-	function convertTimeToClient($value, $format='') {
+	static function convertTimeToClient($value, $format='') {
 		if (is_object($value) && is_a($value, 'Date')) {
 			$dateobj = &$value;
 		} else if (is_string($value)) {
@@ -75,7 +75,7 @@ class NDate extends Object {
 		return $value;
 	}
 
-	function convertTimeToUTC($value, $format='') {
+	static function convertTimeToUTC($value, $format='') {
 		// if the field is date/time and is "empty", then it's false
 		if ((preg_match('/^00:00(?::00)?/', $value)) || preg_match('/^0000-00-00 00:00(?::00)?/', $value)) {
 			$value = false;
@@ -116,7 +116,7 @@ class NDate extends Object {
 		return $value;
 	}
 
-	function validDateTime($value) {
+	static function validDateTime($value) {
 		if ((preg_match('/^00:00(?::00)?/', $value)) || preg_match('/^0000-00-00$/', $value) || preg_match('/^0000-00-00 00:00(?::00)?/', $value)) {
 			return false;
 		} else if ((preg_match('/^\d\d:\d\d(?::\d\d)?/', $value)) || preg_match('/^\d\d\d\d-\d\d-\d\d$/', $value) || preg_match('/^\d\d\d\d-\d\d-\d\d \d\d:\d\d(?::\d\d)?/', $value)) {
@@ -125,7 +125,7 @@ class NDate extends Object {
 		return false;
 	}
 
-	function now($format = DATE_FORMAT_ISO) {
+	static function now($format = DATE_FORMAT_ISO) {
 		// this will force to the server time regardless of whether date() is returning UTC time or not
 		$dateobj = new Date(gmdate('Y-m-d H:i:s'));
 		$dateobj->setTZbyID('UTC');
@@ -138,7 +138,7 @@ class NDate extends Object {
 		return $date;
 	}
 
-	function dateToArray($date) {
+	static function dateToArray($date) {
 		if (empty($date)) {
 			$date = array();
 		} elseif (is_scalar($date)) {
@@ -169,7 +169,7 @@ class NDate extends Object {
 		return $date;
 	}
 
-	function arrayToDate($date_input, $timestamp = false) {
+	static function arrayToDate($date_input, $timestamp = false) {
 		// possible year values
 		if (isset($date_input['Y'])) {
 			$year = $date_input['Y'];

@@ -96,7 +96,7 @@ class LoginController extends AppController {
 				if ($result = $cms_auth->setConfirmationToken($vals['email'])) {
 					// Send the confirmation email.
 					$user = NController::factory('users');
-					$user->sendConfirmationEmail($vals['email']);
+					$result = $user->sendConfirmationEmail($vals['email']);
 				}
 			}
 			// TODO: Put this into the template and out of here.
@@ -134,8 +134,9 @@ class LoginController extends AppController {
 				$cms_auth->confirmation_token = 'NULL';
 				$cms_auth->save();
 				// Reset it and send it out.
-				$cms_auth->resetPassword($email);
-				$content = 'The password was reset and emailed.';
+				$content = $cms_auth->resetPassword($email)
+					? 'The password was reset and emailed.'
+					: 'There was a problem - please try again.';
 			}
 		} else {
 			$content = 'There was a problem - please try again.';

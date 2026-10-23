@@ -33,7 +33,7 @@ class NView extends Smarty {
 	var $helper = null;
 	var $url = '';
 
-	function NView(&$controller) {
+	function __construct(&$controller) {
 		if (is_object($controller)) {
 			$this->controller = &$controller;
 			$this->name = $controller->name;
@@ -46,10 +46,10 @@ class NView extends Smarty {
 		}
 
 		// Smarty setup
-		$this->Smarty();
+		parent::__construct();
 		if (is_object($controller)) {
       // Find templates in /app/views directory, first checking front-end, then back-end
-      $this->template_dir = array($controller->base_view_dir . '/app/views', $controller->base_view_dir . '/vendor/nterchange/app/views');
+      $this->template_dir = array($controller->base_view_dir . '/app/views', NTERCHANGE_DIR . '/app/views');
 			// $this->template_dir = $controller->base_view_dir . '/app/views';
 		}
 		if (is_dir(BASE_DIR . '/vendor/SmartyPaginate/plugins')) {
@@ -77,7 +77,7 @@ class NView extends Smarty {
 		}
 	}
 
-	function &singleton(&$controller) {
+	static function &singleton(&$controller) {
 		static $instances = array();
 		// if $controller is not an object, just use the string
 		$name = is_object($controller)?$controller->name:$controller;
@@ -99,10 +99,7 @@ class NView extends Smarty {
 			$options = array('action'=>$options);
 		}
 		if (isset($options['status'])) {
-			require_once 'HTTP/Header.php';
-			$http = new HTTP_Header;
-			$http->sendStatusCode($options['status']);
-			unset($http);
+			http_response_code((int) $options['status']);
 		}
 		if (isset($options['nothing']) && $options['nothing']) {
 			return '';
@@ -343,9 +340,11 @@ class NView extends Smarty {
 
 	function _getViewFileName($action) {
 		$filename = null;
-		if (file_exists($this->template_dir . '/' . $this->name . '/' . $action . '.html')) {
-			$filename = $this->template_dir . '/' . $this->name . '/' . $action . '.html';
-		} else if (file_exists(BASE_DIR  . '/app/views/' . $this->name . '/' . $action . '.html')) {
+		foreach ((array) $this->template_dir as $directory) {
+			$candidate = $directory . '/' . $this->name . '/' . $action . '.html';
+			if (is_file($candidate)) return $candidate;
+		}
+		if (file_exists(BASE_DIR  . '/app/views/' . $this->name . '/' . $action . '.html')) {
 			$filename = BASE_DIR . '/app/views/' . $this->name . '/' . $action . '.html';
 		} else if (file_exists(BASE_DIR . '/app/views/templates/' . $action . '.html')) {
 			$this->template_dir = BASE_DIR . '/app/views/';
@@ -371,12 +370,13 @@ class NView extends Smarty {
 
 	function _getLayoutFileName($layout) {
 		$root_path     = ROOT_DIR . "/app/views/layouts/$layout.html";
-		$template_path = $this->template_dir . "/layouts/$layout.html";
-		$base_path     = BASE_DIR . "/app/views/layouts/$layout.html";
-
-		if      (file_exists($root_path))     { return $root_path;     }
-		else if (file_exists($template_path)) { return $template_path; }
-		else if (file_exists($base_path))     { return $base_path;     }
+		if (is_file($root_path)) return $root_path;
+		foreach ((array) $this->template_dir as $directory) {
+			$template_path = $directory . "/layouts/$layout.html";
+			if (is_file($template_path)) return $template_path;
+		}
+		$base_path = NTERCHANGE_DIR . "/app/views/layouts/$layout.html";
+		if (is_file($base_path)) return $base_path;
 	}
 
 	function __destruct() {

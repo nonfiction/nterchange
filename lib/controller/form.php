@@ -29,7 +29,7 @@ class ControllerForm {
 	var $time_format = 'H:i:s';
 	var $rule_required_message = '%s is a required field';
 
-	function ControllerForm(&$controller, &$model, $options=null) {
+	function __construct(&$controller, &$model, $options=null) {
 		include_once 'n_quickform.php';
 		$this->controller = &$controller;
 		$this->model = &$model;
@@ -482,7 +482,7 @@ class ControllerForm {
 			if (isset($values['__submit__'])) {
 				if ($this->controller->versioning == true) {
           if (!isset($values['__skip_versioning__'])) {
-            $this->controller->debug('Inserting new version for ' . $model->tableName() . ': ' . $model->$pk, 'VERSION');
+            $this->controller->debug('Inserting new version for ' . $model->tableName() . ': ' . $model->$pk, N_DEBUGTYPE_ASSET);
             $version_id = $this->controller->insertVersion();
           }
 				}
@@ -665,7 +665,7 @@ class ControllerForm {
 
 require_once 'HTML/QuickForm/select.php';
 class HTML_QuickForm_foreignkey extends HTML_QuickForm_select {
-	function HTML_QuickForm_foreignkey($elementName=null, $elementLabel=null, $options=null, $attributes=null) {
+	function __construct($elementName=null, $elementLabel=null, $options=null, $attributes=null) {
 		if (!isset($options['model']) || !isset($options['headline']))
 			return;
 		$add_empty_option = isset($options['addEmptyOption'])?(bool) $options['addEmptyOption']:false;
@@ -693,7 +693,7 @@ class HTML_QuickForm_foreignkey extends HTML_QuickForm_select {
 		if (empty($options)) {
 			$options[0] = 'N/A';
 		}
-		$this->HTML_QuickForm_select($elementName, $elementLabel, $options, $attributes);
+		parent::__construct($elementName, $elementLabel, $options, $attributes);
 		$this->_type = 'foreignkey';
 	}
 }

@@ -103,8 +103,7 @@ class CmsAuth extends NModel {
 		        $this->password = md5($password);
 		        $this->save();
 				$users = NController::factory('users');
-		        $users->passwordEmail($this->toArray(), $password);
-				return true;
+		        return $users->passwordEmail($this->toArray(), $password);
 			}
 		} else {
 			return false;

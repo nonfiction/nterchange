@@ -18,8 +18,10 @@
  * @link       	http://www.nterchange.com/
  * @since      	File available since Release 3.0
  */
-class Object {
+#[\AllowDynamicProperties]
+class NObject {
 	function __construct(){}
+	function __destruct(){}
 
 	function toString() {
 		return get_class($this);

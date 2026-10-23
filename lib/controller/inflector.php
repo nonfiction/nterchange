@@ -19,7 +19,7 @@ require_once 'n_object.php';
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.0
  */
-class Inflector extends Object {
+class Inflector extends NObject {
 	function __construct () {
 		parent::__construct();
 	}

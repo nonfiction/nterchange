@@ -19,7 +19,7 @@
  * @since      	File available since Release 3.0
  */
 class ViewHelper {
-	function ViewHelper(&$view) {
+	function __construct(&$view) {
 		include_once 'helpers/tag_helper.php';
 		include_once 'helpers/asset_tag_helper.php';
 		include_once 'helpers/url_helper.php';

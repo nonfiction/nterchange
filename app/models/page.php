@@ -97,17 +97,17 @@ class Page extends ModelTree {
 		return true;
 	}
 	
-	function afterCreate() {
+	function afterCreate($result_id = null) {
 		// Delete Smarty Cache
 		$this->deleteSmartyCache();
 	}
 	
-	function afterUpdate() {
+	function afterUpdate($result_id = null) {
 		// Delete Smarty Cache
 		$this->deleteSmartyCache();
 	}
 	
-	function afterDelete($page_id) {
+	function afterDelete($page_id = null, $destroyed = 0) {
 		// After a page is deleted, make sure to remove all linked 
 		// content from the page_content table. Cleans things up and
 		// helps with some possible workflow trauma.

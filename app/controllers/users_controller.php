@@ -27,7 +27,7 @@ class UsersController extends AdminController {
 		parent::__construct();
 	}
 
-	function index($parameter) {
+	function index($parameter = null) {
 		$current_user_level = $this->_auth->getAuthData('user_level');
 		if ($current_user_level < N_USER_ADMIN) {
 			$user_id = $this->_auth->getAuthData('id');
@@ -36,22 +36,22 @@ class UsersController extends AdminController {
 		$this->redirectTo('viewlist', $parameter);
 	}
 
-	function viewlist($parameter) {
+	function viewlist($parameter = null, $layout = true) {
 		$current_user_level = $this->_auth->getAuthData('user_level');
 		if ($current_user_level < N_USER_ADMIN) {
 			$this->redirectTo('index', $parameter);
 		}
-		parent::viewlist($parameter);
+		parent::viewlist($parameter, $layout);
 	}
 
-	function show($parameter) {
+	function show($parameter, $layout = true) {
 		$this->checkUserId($parameter);
-		parent::show($parameter);
+		parent::show($parameter, $layout);
 	}
 
-	function edit($parameter) {
+	function edit($parameter = null, $layout = true) {
 		$this->checkUserId($parameter);
-		parent::edit($parameter);
+		parent::edit($parameter, $layout);
 	}
 
 	function delete($parameter) {
@@ -100,10 +100,10 @@ class UsersController extends AdminController {
 		// $status = &$form->getElement('status');
 		// $status->setChecked(true);
 		// put in confirmation password field
-		$form->insertElementBefore(NQuickForm::createElement('password', 'confirm_password', 'Confirm Password'), 'user_level');
+		$form->insertElementBefore($form->createElement('password', 'confirm_password', 'Confirm Password'), 'user_level');
 		if ($model->{$model->primaryKey()}) {
 			$password->setLabel('Current Password');
-			$form->insertElementBefore(NQuickForm::createElement('password', 'new_password', 'New Password'), 'confirm_password');
+			$form->insertElementBefore($form->createElement('password', 'new_password', 'New Password'), 'confirm_password');
 			$form->addRule(array('new_password', 'confirm_password'), 'The passwords do not match', 'compare');
 			$form->addRule('new_password', 'The new password must be at least 8 characters long and contain upper and lower case characters and a number.', 'minlength', 8, 'client');
 			$form->addRule('new_password', 'The new password must be at least 8 characters long and contain upper and lower case characters and a number.', 'regex', '/[A-Z]/', 'client');
@@ -166,7 +166,7 @@ class UsersController extends AdminController {
 	 *
 	 * @param 	array 	cms_user array
 	 * @param	string 	The password for the user.
-	 * @return 	void
+	 * @return 	boolean
 	 **/
 	function passwordEmail($model_array, $password) {
 		$this->set($model_array);
@@ -178,14 +178,14 @@ class UsersController extends AdminController {
 		$email_from = 'website@' . $_SERVER['SERVER_NAME'];
 		$email_to = $model_array['email'];
 		$email_subject = SITE_NAME . ' - Forgotten Password';
-		mail($email_to, $email_subject, $email_message);
+		return mail($email_to, $email_subject, $email_message);
 	}
 	
 	/**
 	 * sendConfirmationEmail - Sends a confirmation email for a password reset.
 	 *
 	 * @param 	string	The email address to send the email to.
-	 * @return 	void
+	 * @return 	boolean
 	 **/
 	function sendConfirmationEmail($email) {
 		$cms_auth = NModel::factory('cms_auth');
@@ -199,8 +199,9 @@ class UsersController extends AdminController {
 			$email_from = 'website@' . $_SERVER['SERVER_NAME'];
 			$email_to = $email;
 			$email_subject = SITE_NAME . ' - Confirm Password Reset';
-			mail($email_to, $email_subject, $email_message);
+			return mail($email_to, $email_subject, $email_message);
 		}
+		return false;
 	}
 
 }

@@ -35,8 +35,8 @@ define('N_DAO_FLOAT', 128);
 define('N_DAO_NOTNULL', 256);
 define('N_DAO_MYSQLTIMESTAMP', 512);
 
-if (substr(phpversion(),0,1) == 5) {
-	class NModel_Overload extends Object {
+if (PHP_VERSION_ID >= 50000) {
+	class NModel_Overload extends NObject {
 		function __call($method,$args) {
 			$return = null;
 			$this->_call($method,$args,$return);
@@ -92,7 +92,7 @@ if (substr(phpversion(),0,1) == 5) {
  * @link       	http://www.nterchange.com/
  * @since      	File available since Release 3.0
  */
-class NModel extends Object implements ArrayAccess {
+class NModel extends NObject implements ArrayAccess {
 	/**
 	 * Container for the PEAR::DB object
 	 *
@@ -430,7 +430,7 @@ class NModel extends Object implements ArrayAccess {
 	 * @see NModel::factory
 	 * @return object
 	 */
-	function &singleton($model) {
+	static function &singleton($model) {
 		static $models;
 		if (!isset($models)) $models = array();
 		$key = md5($model);
@@ -592,7 +592,7 @@ class NModel extends Object implements ArrayAccess {
 	 * offsetExists - ArrayAccess method
 	 * if $this->key is set, array_key_exists('key', $this) will be true
 	 */
-	public function offsetExists($offset) {
+	public function offsetExists($offset): bool {
 		return method_exists($this, $offset) || property_exists($this, $offset);
 	}
 
@@ -602,7 +602,7 @@ class NModel extends Object implements ArrayAccess {
 	 * @return mixed  the value stored at $this->key
 	 * @throws Exception If key doesn't exist
 	 */
-	public function offsetGet($offset) {
+	public function offsetGet($offset): mixed {
 		if (property_exists($this, $offset))
 			return $this->$offset;
 		elseif (method_exists($this, $offset))
@@ -616,7 +616,7 @@ class NModel extends Object implements ArrayAccess {
 	 * @param  string $offset The name of the property
 	 * @param  mixed  $value
 	 */
-	public function offsetSet($offset, $value) {
+	public function offsetSet($offset, $value): void {
 		$this->$offset = $value;
 	}
 
@@ -624,7 +624,7 @@ class NModel extends Object implements ArrayAccess {
 	 * offsetUnset - ArrayAccess method
 	 * @param  string $offset The key to unset
 	 */
-	public function offsetUnset($offset) {
+	public function offsetUnset($offset): void {
 		if (property_exists($this, $offset))
 				unset($this->$offset);
 	}

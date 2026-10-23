@@ -22,7 +22,7 @@
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.1.16
  */
-class NImage extends Object {
+class NImage extends NObject {
 	// List of image formats we can convert to jpeg. These are all tested and work.
 	// NOTE: PDF can do some odd things (sizes and cropping) - but it does convert.
 	var $bad_formats = array ('PSD', 'TIFF', 'BMP', 'PS', 'PCD', 'WMF', 'PDF');

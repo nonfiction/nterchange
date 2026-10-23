@@ -35,7 +35,7 @@ define('N_DEBUGTYPE_ALL',   127);
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.0
  */
-class NDebug extends Object {
+class NDebug extends NObject {
 
 	static function debug($message, $debug_type = N_DEBUGTYPE_INFO, $log_level = PEAR_LOG_DEBUG, $ident=false) {
 		$debug_level = defined('DEBUG_LEVEL')?constant('DEBUG_LEVEL'):0;

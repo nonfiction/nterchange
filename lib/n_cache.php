@@ -25,37 +25,37 @@ require_once 'Cache/Lite.php';
  * @since      File available since Release 3.0
  */
 class NCache {
-	function createMenu($content) {
+	static function createMenu($content) {
 		$cache = new Cache_Lite(array('cacheDir'=>CACHE_DIR . '/ntercache/', 'lifeTime'=>3600*24*7));
 		return $cache->save(serialize($content), 'menunodes', 'default');
 	}
-	function getMenu() {
+	static function getMenu() {
 		$cache = new Cache_Lite(array('cacheDir'=>CACHE_DIR . '/ntercache/', 'lifeTime'=>3600*24*7));
 		$nodes = $cache->get('menunodes', 'default');
 		if (!$nodes) return;
 		return unserialize($nodes);
 	}
-	function removeMenu() {
+	static function removeMenu() {
 		$cache = new Cache_Lite(array('cacheDir'=>CACHE_DIR . '/ntercache/', 'lifeTime'=>3600*24*7));
 		return $cache->remove('menunodes', 'default');
 	}
 
-	function createTreeAsSelect($content) {
+	static function createTreeAsSelect($content) {
 		$cache = new Cache_Lite(array('cacheDir'=>CACHE_DIR . '/ntercache/', 'lifeTime'=>3600*24*7));
 		return $cache->save(serialize($content), 'treeasselect', 'default');
 	}
-	function getTreeAsSelect() {
+	static function getTreeAsSelect() {
 		$cache = new Cache_Lite(array('cacheDir'=>CACHE_DIR . '/ntercache/', 'lifeTime'=>3600*24*7));
 		$nodes = $cache->get('treeasselect', 'default');
 		if (!$nodes) return;
 		return unserialize($nodes);
 	}
-	function removeTreeAsSelect() {
+	static function removeTreeAsSelect() {
 		$cache = new Cache_Lite(array('cacheDir'=>CACHE_DIR . '/ntercache/', 'lifeTime'=>3600*24*7));
 		return $cache->remove('treeasselect', 'default');
 	}
 
-	function removeJavascript($id=0) {
+	static function removeJavascript($id=0) {
 		$page = &NController::singleton('page');
 		$page->base_view_dir = ROOT_DIR;
 		$page->view_caching = (bool) PAGE_CACHING;

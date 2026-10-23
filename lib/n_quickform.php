@@ -20,8 +20,8 @@ require_once 'HTML/QuickForm.php';
  * @since      	File available since Release 3.0
  */
 class NQuickForm extends HTML_QuickForm {
-	function NQuickForm($formName='', $method='POST', $action='', $target='_self', $attributes=null) {
-		$this->HTML_QuickForm($formName, $method, $action, $target, $attributes);
+	function __construct($formName='', $method='POST', $action='', $target='_self', $attributes=null) {
+		parent::__construct($formName, $method, $action, $target, $attributes);
 		$renderer =& $this->defaultRenderer();
 		$renderer->setHeaderTemplate("\n\t<tr class='{label_2}'>\n\t\t<td nowrap=\"nowrap\" align=\"left\" valign=\"top\" colspan=\"2\" class=\"header\"><div class=\"header\">{header}</div></td>\n\t</tr>");
 		$renderer->setElementTemplate("\n\t<tr class='{label_2}'>\n\t\t<td align=\"right\" valign=\"top\"><!-- BEGIN required --><span class=\"formerror\">*</span><!-- END required --><b>{label}</b></td>\n\t\t<td nowrap=\"nowrap\" valign=\"top\" align=\"left\"><!-- BEGIN error --><div class=\"formerror\">{error}</div><!-- END error -->\t{element}</td>\n\t</tr>");
@@ -99,7 +99,7 @@ class NQuickForm extends HTML_QuickForm {
 					$vars = array('D', 'l', 'd', 'M', 'm', 'F', 'Y', 'y', 'h', 'H', 'i', 's', 'a', 'A');
 					$tmp = '';
 					for ($i = 0, $length = strlen($elem->_options['format']); $i < $length; $i++) {
-						$sign = $elem->_options['format']{$i};
+						$sign = $elem->_options['format'][$i];
 						$tmp .= in_array($sign, $vars)?$val[$sign]:$sign;
 					}
 					$val = date($elem->_options['format'], strtotime($tmp));
@@ -179,7 +179,7 @@ class NQuickForm extends HTML_QuickForm {
 						$vars = array('D', 'l', 'd', 'M', 'm', 'F', 'Y', 'y', 'h', 'H', 'i', 's', 'a', 'A');
 						$tmp = '';
 						for ($i = 0, $length = strlen($elem->_options['format']); $i < $length; $i++) {
-							$sign = $elem->_options['format']{$i};
+							$sign = $elem->_options['format'][$i];
 							$tmp .= in_array($sign, $vars)?$val[$sign]:$sign;
 						}
 						if ($field_type == 'date') {
@@ -227,8 +227,8 @@ require_once 'HTML/QuickForm/static.php';
  */
 class HTML_QuickForm_cmsalert extends HTML_QuickForm_static
 {
-	function HTML_QuickForm_cmsalert($elementName = null, $text = null) {
-		$this->HTML_QuickForm_static($elementName, null, $text);
+	function __construct($elementName = null, $text = null) {
+		parent::__construct($elementName, null, $text);
 		$this->_type = 'cmserror';
 	}
 
@@ -244,8 +244,8 @@ class HTML_QuickForm_cmsalert extends HTML_QuickForm_static
  */
 class HTML_QuickForm_cmserror extends HTML_QuickForm_static
 {
-	function HTML_QuickForm_cmserror($elementName = null, $text = null) {
-		$this->HTML_QuickForm_static($elementName, null, $text);
+	function __construct($elementName = null, $text = null) {
+		parent::__construct($elementName, null, $text);
 		$this->_type = 'cmserror';
 	}
 
@@ -259,7 +259,6 @@ require_once 'HTML/QuickForm/file.php';
 require_once 'HTML/QuickForm/link.php';
 require_once 'HTML/QuickForm/hidden.php';
 require_once 'HTML/QuickForm/checkbox.php';
-require_once 'HTML/QuickForm/CAPTCHA.php';
 class HTML_QuickForm_CMS_file extends HTML_QuickForm_group
 {
 
@@ -292,8 +291,8 @@ class HTML_QuickForm_CMS_file extends HTML_QuickForm_group
 	* @param	array   Options to control the element's display
 	* @param	mixed   Either a typical HTML attribute string or an associative array
 	*/
-	function HTML_QuickForm_CMS_file($elementName = null, $elementLabel = null, $options = array(), $attributes = null) {
-		$this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+	function __construct($elementName = null, $elementLabel = null, $options = array(), $attributes = null) {
+		HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
 		$this->_persistantFreeze = true;
 		$this->_appendName = false;
 		$this->_type = 'cms_file';
@@ -326,14 +325,14 @@ class HTML_QuickForm_CMS_file extends HTML_QuickForm_group
 			include_once 'n_filesystem.php';
 			if (file_exists($_SERVER['DOCUMENT_ROOT'] . $this->getValue())) {
 				$filesize = NFilesystem::filesize_format(filesize($_SERVER['DOCUMENT_ROOT'] . $this->getValue()));
-				$this->_elements[] =& new HTML_QuickForm_hidden($this->getName() . '__current', $this->getValue());
-				$this->_elements[] =& new HTML_QuickForm_link(null, 'Current File', $this->getValue(), $this->getValue() . ($filesize?' (' . $filesize . ')':''), array('target'=>'_blank'));
-				$this->_elements[] =& new HTML_QuickForm_checkbox($this->getName() . '__remove', null, 'Remove File', $this->getAttributes());
+				$this->_elements[] = new HTML_QuickForm_hidden($this->getName() . '__current', $this->getValue());
+				$this->_elements[] = new HTML_QuickForm_link(null, 'Current File', $this->getValue(), $this->getValue() . ($filesize?' (' . $filesize . ')':''), array('target'=>'_blank'));
+				$this->_elements[] = new HTML_QuickForm_checkbox($this->getName() . '__remove', null, 'Remove File', $this->getAttributes());
 			} else {
 				$this->setValue(false);
 			}
 		}
-		$this->_elements[] =& new HTML_QuickForm_file($this->getName(), $this->getLabel(), $this->_options, $this->getAttributes());
+		$this->_elements[] = new HTML_QuickForm_file($this->getName(), $this->getLabel(), $this->_options, $this->getAttributes());
 	}
 
 	// }}}
@@ -355,7 +354,7 @@ class HTML_QuickForm_CMS_file extends HTML_QuickForm_group
 
 	function toHtml() {
 		include_once('HTML/QuickForm/Renderer/Default.php');
-		$renderer =& new HTML_QuickForm_Renderer_Default();
+		$renderer = new HTML_QuickForm_Renderer_Default();
 		$renderer->setElementTemplate($this->_wrap[0] . '{element}' . $this->_wrap[1]);
 		// $renderer->setGroupElementTemplate('{element}', $this->getName());
 		parent::accept($renderer);
@@ -398,8 +397,7 @@ class HTML_QuickForm_CMS_file extends HTML_QuickForm_group
 				return $this->onQuickFormEvent('updateValue', null, $caller);
 				break;
 			case 'createElement':
-				$className = get_class($this);
-				$this->$className($arg[0], $arg[1], $arg[2]);
+				$this->__construct($arg[0], $arg[1], $arg[2]);
 				break;
 		}
 		return true;

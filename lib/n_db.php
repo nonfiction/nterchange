@@ -23,7 +23,7 @@ require_once 'MDB2.php';
  */
 class NDB {
 
-  static $type = 'mysql';
+  static $type = 'mysqli';
   static $username = 'root';
   static $password = false;
   static $server = 'localhost';
@@ -46,7 +46,8 @@ class NDB {
   static function dsn() {
     $db = getenv('DB_DATABASE');
     $db = $db ? $db : self::$db;
-    return self::serverDSN().'/'.$db;
+    $charset = getenv('DB_CHARSET') ?: 'utf8mb4';
+    return self::serverDSN().'/'.$db.'?charset='.rawurlencode($charset);
   }
 
   static function &connect($dsn=null) {

@@ -47,16 +47,16 @@ class PageController extends SiteAdminController {
     parent::__construct();
   }
 
-  function index($parameter) {
+  function index($parameter = null) {
     $this->page($parameter);
   }
 
-  function create($parameter) {
+  function create($parameter = null, $layout = true) {
     $this->nterchange = true;
-    parent::create($parameter);
+    parent::create($parameter, $layout);
   }
 
-  function edit($parameter) {
+  function edit($parameter = null, $layout = true) {
     if (!$this->checkUserLevel()) {
       $this->redirectTo(array('site_admin'));
     }
@@ -68,7 +68,7 @@ class PageController extends SiteAdminController {
     $this->set('page_title', $model->title);
     $this->loadSidebar();
     $model->reset();
-    parent::edit($parameter);
+    parent::edit($parameter, $layout);
   }
 
   /**
@@ -267,7 +267,7 @@ class PageController extends SiteAdminController {
     return parent::checkUserLevel();
   }
 
-  function viewlist() {
+  function viewlist($parameter = null, $layout = true) {
     if ($this->flash->exists('notice')) {
       $this->flash->keep('notice');
     }
@@ -1012,8 +1012,8 @@ class PageController extends SiteAdminController {
     $page_template_value = $page_template_value[0];
     $tpl = &$form->getElement('page_template_id');
     $tpl->updateAttributes(array('onchange'=>'if(this.options[this.selectedIndex].value != ' . $page_template_value . '){Element.show(\'mv_content_check\');}else{Element.hide(\'mv_content_check\');}'));
-    $mv_content = &NQuickForm::createElement('checkbox', 'mv_content');
-    $mv_content_html = &NQuickForm::createElement('html', '<tr id="mv_content_check" style="display:none;"><td>&nbsp;</td><td><div class="highlight">' . $mv_content->toHTML() . ' Attempt to move content?</div></td></tr>' . "\n");
+    $mv_content = &$form->createElement('checkbox', 'mv_content');
+    $mv_content_html = &$form->createElement('html', '<tr id="mv_content_check" style="display:none;"><td>&nbsp;</td><td><div class="highlight">' . $mv_content->toHTML() . ' Attempt to move content?</div></td></tr>' . "\n");
     $form->insertElementBefore($mv_content_html, 'visible');
     // add section headers
     if ($model->{$model->primaryKey()} == $model->getRootNode()) {
@@ -1272,7 +1272,9 @@ class PageController extends SiteAdminController {
         NCache::createTreeAsSelect($options);
       }
     }
-    return NQuickForm::createElement('select', $name, $label, $options);
+    $form = new NQuickForm();
+    $element = &$form->createElement('select', $name, $label, $options);
+    return $element;
   }
 
   function getOptions($options=false, $id=0, $level=0) {

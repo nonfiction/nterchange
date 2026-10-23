@@ -115,7 +115,7 @@ class AppController extends NController {
 	 */
 	function render($options=array()) {
 		if (is_array($options) && isset($options['layout'])) {
-			$this->set('navigation', nterchangeController::navigation($this->name));
+			$this->set('navigation', nterchangeController::navigation($this));
 			if (isset($this->_auth) && is_object($this->_auth)) {
 				$this->set('login_name', $this->_auth->getAuthData('real_name'));
 			}
@@ -134,7 +134,7 @@ class AppController extends NController {
 	 * @return null
 	 */
 	function renderLayout($layout, $main_content, $sidebar_content=null, $return=false) {
-		$this->set('navigation', nterchangeController::navigation($this->name));
+		$this->set('navigation', nterchangeController::navigation($this));
 		if (isset($this->_auth) && is_object($this->_auth)) {
 			$this->set('login_name', $this->_auth->getAuthData('real_name'));
 		}
@@ -471,8 +471,8 @@ class AppController extends NController {
           $form->setDefaults(array('timed_start'=>$page_content_model->timed_start, 'timed_end'=>$page_content_model->timed_end));
 				}
 				$page_content_model = &NModel::factory('page_content');
-        $timed_start_el = &ControllerForm::addElement('timed_start', $form, $page_content_model);
-        $timed_end_el = &ControllerForm::addElement('timed_end', $form, $page_content_model);
+        $timed_start_el = &$cform->addElement('timed_start', $form, $page_content_model);
+        $timed_end_el = &$cform->addElement('timed_end', $form, $page_content_model);
         if ($timed_start_el) {
           $form->insertElementBefore($form->removeElement('timed_start'), ($form->elementExists('__submit_workflow__')?'__submit_workflow__':'__submit__'));
         }
@@ -844,10 +844,10 @@ class AppController extends NController {
 			return false;
 		}
 		if (!$this->_versionDiff($model)) {
-			$this->debug('Version not changed for ' . $model->tableName() . ': ' . $model->$pk, 'VERSION');
+			$this->debug('Version not changed for ' . $model->tableName() . ': ' . $model->$pk, N_DEBUGTYPE_ASSET);
 			return false;
 		}
-		$this->debug($model->tableName() . ' ' . $model->$pk, 'VERSION insert');
+		$this->debug($model->tableName() . ' ' . $model->$pk, N_DEBUGTYPE_ASSET);
 		// load the current info from the db (this happens before the update)
 		$old_model = &NModel::factory($this->name);
 		$old_model->get($model->$pk);

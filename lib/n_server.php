@@ -19,7 +19,7 @@ require_once 'n_object.php';
  * @link       	http://www.nterchange.com/
  * @since      	File available since Release 3.0
  */
-class NServer extends Object {
+class NServer extends NObject {
 	/**
 	 * Returns the REQUEST_URI from the server environment, or, failing that,
 	 * constructs a new one, using the PHP_SELF constant and other variables.

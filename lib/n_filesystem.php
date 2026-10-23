@@ -27,7 +27,7 @@ class NFilesystem {
 	 * @param	string	A raw filename ready to be cleaned.
 	 * @return 	string	A cleaned up filename.
 	 **/
-	function cleanFileName($str) {
+	static function cleanFileName($str) {
 		$badchars = array('`','~','!','@','#','$','%','^','&','*','(',')','=','+',';',':','\'','\\','"',',','<','>','/','?');
 		// spaces-to-dashes, multiple-space-to-single, remove badchars
 		return str_replace(' ', '-', trim(preg_replace('/ +/', ' ', strtolower(str_replace($badchars, '', $str)))));
@@ -40,7 +40,7 @@ class NFilesystem {
 	 * @param	string	Folder permissions in octal format.
 	 * @return 	boolean
 	 **/
-	function buildDirs($dir, $mode = 0755) {
+	static function buildDirs($dir, $mode = 0755) {
 		if (is_dir($dir) || @mkdir($dir, $mode)) return true;
 		if (!NFilesystem::buildDirs(dirname($dir), $mode)) return false;
 		return @mkdir($dir, $mode);
@@ -96,7 +96,7 @@ class NFilesystem {
 	 * @param   string   The file or folder to delete
 	 * @return  boolean  True if successfully deleted
 	 */
-	function deletePathRecursive($path){
+	static function deletePathRecursive($path){
 		$path = str_replace(DOCUMENT_ROOT, '', $path);
 		$path = DOCUMENT_ROOT.$path;
 		if (is_dir($path)){
@@ -139,7 +139,7 @@ class NFilesystem {
 	 * @param	string	A fully qualified filename.
 	 * @return 	string	The file extension.
 	 **/
-	function getExtension($filename) {
+	static function getExtension($filename) {
 		preg_match("/\.[\w]{1,6}$/i", $filename, $matches);
 		$extension = array_pop($matches);
 		$extension = str_replace('.', '', $extension);
@@ -153,7 +153,7 @@ class NFilesystem {
 	 * @param	string	A fully qualified filename.
 	 * @return 	string	The MIME type for that file.
 	 **/
-	function getMimeType($filename) {
+	static function getMimeType($filename) {
 		// Use the fileinfo pecl extension if it's available.
 		if (function_exists('finfo_open')) {
 			$handle = finfo_open(FILEINFO_MIME);
@@ -203,7 +203,7 @@ class NFilesystem {
 	 * @param	int		Size of the file in bytes.
 	 * @return 	string	Size of the file in human readable format.
 	 **/
-	function filesize_format($bytes) {
+	static function filesize_format($bytes) {
 		if (0 >= $bytes) {
 			return $bytes;
 		}
@@ -221,7 +221,7 @@ class NFilesystem {
 	 * @param	int		Speed in K to estimate download time.
 	 * @return 	int		Seconds (estimated) it will take to download the file.
 	 **/
-	function download_time($bytes, $speed_in_k = 56) {
+	static function download_time($bytes, $speed_in_k = 56) {
 		if (0 >= $bytes) {
 			return $bytes;
 		}

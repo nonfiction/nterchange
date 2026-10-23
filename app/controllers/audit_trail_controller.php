@@ -58,7 +58,7 @@ class AuditTrailController extends AdminController {
 	 *
 	 * @return void
 	 **/
-	function viewlist($parameter) {
+	function viewlist($parameter = null, $layout = true) {
 		include_once 'n_date.php';
 		include_once 'n_quickform.php';
 		require_once 'HTML/QuickForm/Renderer/Array.php';
@@ -75,7 +75,7 @@ class AuditTrailController extends AdminController {
 		  $date = $this->dateStartEnd();
 		}
 
-    $el = &$form->addElement('date', 'date', 'Date', array('addEmptyOption'=>true, 'format'=>'F d Y', 'maxYear' => 2015));
+    $el = &$form->addElement('date', 'date', 'Date', array('addEmptyOption'=>true, 'format'=>'F d Y', 'minYear' => NConfig::$auditTrailMinYear, 'maxYear' => date('Y') + 1));
 		$el->setValue($date['used']);
 
 		$form->addElement('submit', null, 'Search');
@@ -402,16 +402,16 @@ class AuditTrailController extends AdminController {
 
 	// override all the crud functions so that no one can edit or manually create an audit trail
 	// insert is already overridden above with a custom method
-	function create() {
+	function create($parameter = null, $layout = true) {
 		$this->redirectTo('viewlist');
 	}
-	function edit() {
+	function edit($parameter = null, $layout = true) {
 		$this->redirectTo('viewlist');
 	}
-	function update() {
+	function update($parameter = null) {
 		$this->redirectTo('viewlist');
 	}
-	function delete() {
+	function delete($parameter = null) {
 		$this->redirectTo('viewlist');
 	}
 

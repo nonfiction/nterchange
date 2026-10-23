@@ -28,7 +28,7 @@
  * @link       http://www.nterchange.com/
  * @since      File available since Release 3.0
  */
-class NFlash extends Object {
+class NFlash extends NObject {
 	var $keeps = array();
 	var $nows = array();
 	var $flashes = array();

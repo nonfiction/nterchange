@@ -39,9 +39,9 @@ class nterchangeController extends AppController {
 		parent::__construct();
 	}
 
-	function navigation($current_section) {
-		if (!isset($this->_auth)) return;
-		$current_user_level = $this->_auth->getAuthData('user_level');
+	static function navigation($controller) {
+		if (!isset($controller->_auth)) return;
+		$current_user_level = $controller->_auth->getAuthData('user_level');
 		// need to loop through other constructors and see
 		// if they belong in the navigation tabs
 		$navigation = array();
@@ -59,12 +59,12 @@ class nterchangeController extends AppController {
 		}
 		foreach ($navigation as $k=>$nav) {
 			$ctrl = &NController::factory($nav['controller']);
-			$ctrl->_auth = &$this->_auth;
+			$ctrl->_auth = &$controller->_auth;
 			if (!$ctrl || !$ctrl->checkUserLevel()) {
 				unset($navigation[$k]);
 				continue;
 			}
-			if ($this->name == $ctrl->name || is_a($this, get_class($ctrl))) {
+			if ($controller->name == $ctrl->name || is_a($controller, get_class($ctrl))) {
 				$navigation[$k]['class'] .= ($navigation[$k]['class']?' ':'') . 'current';
 			}
 		}
