@@ -54,10 +54,29 @@ not a new YAML parser implementation or a claim of complete YAML support.
 
 `nterchange/` retains the repository's existing browser resources, images and
 fonts. CKEditor and its bundled plugins keep their license files in place.
-This task does not replace browser libraries, add client assets or grant new
-rights to fonts or other pre-existing resources. Resource licensing and legacy
-browser-library security still need review before a stable release. Do not
-serve demo/test directories or expose the package root.
+Resource licensing and legacy browser-library security still need review before
+a stable release. Do not serve demo/test directories or expose the package root.
+
+The CMS head serves the same Prototype 1.7.3 and Scriptaculous 1.9.0 versions
+previously requested from cdnjs, now under local versioned JavaScript paths.
+Code bytes and dependency order are unchanged. No CDN allowance is needed in
+CSP. This is an availability fix, not a library upgrade or security review.
+Older root-level browser copies remain untouched.
+
+- `prototype/1.7.3/prototype.js` is copied from
+  <https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.js>.
+  Its copyright notice remains in the file. `licenses/Prototype-MIT.txt` is
+  the upstream LICENSE text from Git blob
+  `05789cf01905528ef9d9eda7be54c61dda350fdc` in `prototypejs/prototype`.
+- `scriptaculous/1.9.0/` contains `scriptaculous.min.js`, `builder.min.js`,
+  `effects.min.js`, `dragdrop.min.js`, `slider.min.js` and `controls.min.js`,
+  copied from <https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/>.
+  `licenses/Scriptaculous-MIT.txt` is copied from the upstream
+  [v1.9.0 MIT-LICENSE](https://github.com/madrobby/scriptaculous/blob/v1.9.0/MIT-LICENSE).
+
+Paths above are relative to `nterchange/javascripts/`. The retained
+`tests/layout-assets.php` checks each shipped file's SHA-256 against its pinned
+CDN bytes and renders all three CMS head variants through real NView/Smarty.
 
 The old `vendor/s3.class.php` and remote adapter source remain historical code,
 not tested provider support. The obsolete AWS SDK dependency is no longer

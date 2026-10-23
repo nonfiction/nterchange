@@ -10,12 +10,13 @@ container, database, upload directory or session was used.
 | Check | Result | Limit |
 | --- | --- | --- |
 | Clean archive `composer install` and `composer validate --strict` | Pass | Generated loaders, no captured metadata |
-| `composer test` | 71 runtime, 18 audit cases, 18 pagination/MIME and 34 cache checks pass | Audit auth/query/clock are fakes; no mail sent |
+| `composer test` | 71 runtime, 18 audit cases, 18 pagination/MIME, 34 cache and 75 layout/resource checks pass | Audit auth/query/clock are fakes; no mail sent |
 | Rendered picker scripts | Three callbacks pass | Node VM, not a browser or upload/save test |
 | Synthetic MySQL/MDB2/model/Auth | 16 checks per charset pass | `latin1` and `utf8mb4`; legacy MD5 behavior preserved |
 | Seven isolated Composer consumers | All install and load overrides | Committed application snapshots, no site config |
 | Actual application Text constructors and inherited CRUD | 13 checks for each of seven consumers in each charset pass | Synthetic schema/content/uploads, not site data |
-| PHP 8.5 syntax | All 279 archived PHP files pass | Historical `test/` is excluded, not run |
+| PHP 8.5 syntax | All 280 archived PHP files pass | Historical `test/` is excluded, not run |
+| Pinned browser dependencies | Seven shipped files match CDN SHA-256 and pass Node syntax checks | Same Prototype/Scriptaculous versions, not a browser or security audit |
 | Secret scan | Gitleaks 8.30.1 reports no findings in archive | Does not replace manual artifact review |
 
 Runtime checks use real package classes for grouped date values, blank/nonempty
@@ -32,6 +33,11 @@ error returns, failed writes through both the old boolean and error-object APIs,
 and explicit print/debug error modes. Missing-file removal still returns its
 original PEAR error; it no longer makes an illegal static call on PHP 8.5.
 Existing PEAR dynamic-property deprecations remain visible in the test logs.
+
+Layout checks render the actual default, plain and simple CMS heads through
+NView/Smarty. They verify local dependency URLs, loading order and shipped file
+bytes. Existing resource-helper warnings remain visible. Actual browser script
+execution, CSP responses and application interaction still need consumer tests.
 
 The database tests exercise actual MDB2 schema inspection and model insert,
 read, update, repeated SQL NULL clears, UTC conversion, soft delete and error
