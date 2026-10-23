@@ -13,9 +13,10 @@ container, database, upload directory or session was used.
 | `composer test` | 71 runtime, 18 audit cases, 18 pagination/MIME, 34 cache and 75 layout/resource checks pass | Audit auth/query/clock are fakes; no mail sent |
 | Rendered picker scripts | Three callbacks pass | Node VM, not a browser or upload/save test |
 | Synthetic MySQL/MDB2/model/Auth | 16 checks per charset pass | `latin1` and `utf8mb4`; legacy MD5 behavior preserved |
+| Save as Draft byte preservation | 73 checks per charset pass | Real form/draft/model/MySQL path; synthetic rows, no HTTP or login |
 | Seven isolated Composer consumers | All install and load overrides | Committed application snapshots, no site config |
 | Actual application Text constructors and inherited CRUD | 13 checks for each of seven consumers in each charset pass | Synthetic schema/content/uploads, not site data |
-| PHP 8.5 syntax | All 280 archived PHP files pass | Historical `test/` is excluded, not run |
+| PHP 8.5 syntax | All 281 archived PHP files pass | Historical `test/` is excluded, not run |
 | Pinned browser dependencies | Seven shipped files match CDN SHA-256 and pass Node syntax checks | Same Prototype/Scriptaculous versions, not a browser or security audit |
 | Secret scan | Gitleaks 8.30.1 reports no findings in archive | Does not replace manual artifact review |
 
@@ -45,6 +46,16 @@ returns. The application integration adds the real application's Text factory
 and constructor, byte round trips, updates and per-record upload cleanup. It
 uses an owned temporary directory and a minimal synthetic `text` table. It does
 not copy or infer the original site's schema or content.
+
+`draft-database.php` exercises the real form processor and `AppController::saveDraft`
+with MDB2 RTRIM still enabled. It bypasses route/auth construction, not form hooks
+or SQL. Initial and repeated draft saves preserve every non-headline published
+column, including content ending in CRLF, spaces, tabs or a NUL, literal `null`,
+empty content and a non-CMS datetime. The changed headline retains quotes,
+backslashes and trailing spaces; serialized drafts retain submitted bytes.
+The same regression fails on the previous implementation in both charsets.
+Only the immediate draft-headline write changed. Normal Save still needs
+consumer HTTP tests. This test neither covers workflow nor proves browser parity.
 
 ## Consumer compatibility matrix
 
@@ -121,8 +132,9 @@ consumer root and its generated `vendor/autoload.php`, then run the installed
 package's `tests/consumer.php`.
 
 For database checks, also supply the `DB_*` variables listed in the README and
-run `tests/database.php` or `tests/consumer-database.php`. Both refuse database
-names outside `nterchange_v5_test_*`. Create fresh isolated schemas, one
+run `tests/database.php`, `tests/draft-database.php` or
+`tests/consumer-database.php`. All three refuse database names outside
+`nterchange_v5_test_*`. Create fresh isolated schemas, one
 `latin1` and one `utf8mb4`, with no site data. The tests create and drop their
 named tables. Do not point them at an existing site's database, even a local
 copy. Remove the separate database container/network and private consumers

@@ -472,8 +472,10 @@ class ControllerForm {
 					if (isset($table['cms_headline'])) {
 						$tmp_model = &NModel::factory($this->controller->name);
 						if ($tmp_model && $tmp_model->get($values[$pk])) {
-							$tmp_model->cms_headline = $values['cms_headline'];
-							$tmp_model->update();
+							// MDB2 may RTRIM fetched strings. Write only the headline, not published content.
+							$tmp_model->exec('UPDATE ' . $tmp_model->tableName(true)
+								. ' SET cms_headline=' . $tmp_model->quote($values['cms_headline'])
+								. ' WHERE ' . $pk . '=' . $tmp_model->quote($tmp_model->$pk));
 						}
 						unset($tmp_model);
 					}
