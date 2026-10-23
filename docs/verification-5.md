@@ -10,12 +10,12 @@ container, database, upload directory or session was used.
 | Check | Result | Limit |
 | --- | --- | --- |
 | Clean archive `composer install` and `composer validate --strict` | Pass | Generated loaders, no captured metadata |
-| `composer test` | 71 runtime, 18 audit cases, 18 pagination/MIME checks pass | Audit auth/query/clock are fakes; no mail sent |
+| `composer test` | 71 runtime, 18 audit cases, 18 pagination/MIME and 34 cache checks pass | Audit auth/query/clock are fakes; no mail sent |
 | Rendered picker scripts | Three callbacks pass | Node VM, not a browser or upload/save test |
 | Synthetic MySQL/MDB2/model/Auth | 16 checks per charset pass | `latin1` and `utf8mb4`; legacy MD5 behavior preserved |
 | Seven isolated Composer consumers | All install and load overrides | Committed application snapshots, no site config |
 | Actual application Text constructors and inherited CRUD | 13 checks for each of seven consumers in each charset pass | Synthetic schema/content/uploads, not site data |
-| PHP 8.5 syntax | All 278 archived PHP files pass | Historical `test/` is excluded, not run |
+| PHP 8.5 syntax | All 279 archived PHP files pass | Historical `test/` is excluded, not run |
 | Secret scan | Gitleaks 8.30.1 reports no findings in archive | Does not replace manual artifact review |
 
 Runtime checks use real package classes for grouped date values, blank/nonempty
@@ -26,6 +26,12 @@ missing-controller lookup and the historical code-caller serializer injection
 regression. The upstream advisory CVE-2015-10009 concerns versions before 4.1.1;
 its original correction is already in this repository's history. One retained
 regression is not a security audit.
+
+Cache checks exercise real menu/tree writes, reads and removal, missing-file
+error returns, failed writes through both the old boolean and error-object APIs,
+and explicit print/debug error modes. Missing-file removal still returns its
+original PEAR error; it no longer makes an illegal static call on PHP 8.5.
+Existing PEAR dynamic-property deprecations remain visible in the test logs.
 
 The database tests exercise actual MDB2 schema inspection and model insert,
 read, update, repeated SQL NULL clears, UTC conversion, soft delete and error
