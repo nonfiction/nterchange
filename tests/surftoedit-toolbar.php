@@ -30,13 +30,20 @@ try {
     same(1, preg_match('/\.page-edit \.container\s*\{[^}]*width:\s*auto;[^}]*max-width:\s*980px/s', $css));
     foreach (['.page-edit a:visited', '.page-edit a:hover', '.page-edit a:focus', '.page-edit .surftoedit-white'] as $selector) same(true, str_contains($css, $selector));
     same(1, preg_match('/\.page-edit a:focus\s*\{[^}]*outline:\s*2px solid/s', $css));
-    // WCAG luminance contrast for the exact authored colors. Browser checks cover cascade.
+    same(1, preg_match('/\.page-edit\s*\{[^}]*padding:\s*4px 0/s', $css));
+    // WCAG luminance contrast for authored colors, not test-only color constants.
+    preg_match('/\.page-edit\s*\{[^}]*background-color:\s*#([a-f0-9]{6})/s', $css, $background);
+    $foregrounds = [];
+    foreach (['visited', 'focus'] as $state) {
+        same(1, preg_match('/\.page-edit a:' . $state . '\s*\{[^}]*color:\s*#([a-f0-9]{6})/s', $css, $match));
+        $foregrounds[] = $match[1];
+    }
     $luminance = function ($hex) {
         $rgb = array_map(fn($channel) => hexdec($channel) / 255, str_split($hex, 2));
         $rgb = array_map(fn($v) => $v <= 0.04045 ? $v / 12.92 : pow(($v + 0.055) / 1.055, 2.4), $rgb);
         return $rgb[0] * 0.2126 + $rgb[1] * 0.7152 + $rgb[2] * 0.0722;
     };
-    foreach (['666666', '333333'] as $foreground) same(true, ($luminance('f8f8f8') + 0.05) / ($luminance($foreground) + 0.05) >= 4.5);
+    foreach ($foregrounds as $foreground) same(true, ($luminance($background[1]) + 0.05) / ($luminance($foreground) + 0.05) >= 4.5);
     same(PHP_SESSION_NONE, session_status());
     echo "PASS: $checks rendered toolbar, URL, scoped CSS and contrast checks\n";
 } finally {
