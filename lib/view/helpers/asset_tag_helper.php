@@ -136,8 +136,6 @@ class AssetTagHelper extends TagHelper {
 		$language = isset($params['language'])?$params['language']:'';
 		$charset = isset($params['charset'])?$params['charset']:'';
 		$type = isset($params['type'])?$params['type']:'text/javascript';
-		$timestamp = AssetTagHelper::lastModifiedIncludeTime($full_path);
-		if (isset($timestamp) && $timestamp > 0) $src .= '?' . $timestamp;
 
 		// Did we get a comma delimited string? If so make an array.
 		if(stristr($src,',')){$src = explode(',',$src);}
@@ -169,6 +167,8 @@ class AssetTagHelper extends TagHelper {
  			} else {
  				return;
  			}
+			$timestamp = AssetTagHelper::lastModifiedIncludeTime($full_path);
+			if (isset($timestamp) && $timestamp > 0) $src .= '?' . $timestamp;
  			$include_string = '<script src="' . $src. '"' . ' type="' . $type . '"' . ($language?" language=\"$language\"":'') . ($charset?" charset=\"$charset\"":'') . '></script>';
  		}
 		return $include_string;
