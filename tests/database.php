@@ -25,7 +25,7 @@ result($db->query('SELECT 1'));
 check(str_starts_with(result($db->queryOne('SELECT VERSION()')), '8.4.'), 'MySQL 8.4 required for this test');
 $charset = getenv('DB_CHARSET');
 check(result($db->queryOne('SELECT @@character_set_connection')) === $charset, 'Connection charset');
-result($db->exec('CREATE TABLE v5_fixture (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255) NOT NULL, scheduled DATETIME NULL, cms_deleted TINYINT NOT NULL DEFAULT 0)'));
+result($db->exec('CREATE TABLE v5_fixture (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255) NOT NULL, scheduled DATETIME NULL, timed_start DATETIME NULL, timed_end DATETIME NULL, cms_deleted TINYINT NOT NULL DEFAULT 0)'));
 try {
     class V5Fixture extends NModel {
         var $__table = 'v5_fixture';
@@ -55,6 +55,35 @@ try {
     check((int)$read->delete() === 1, 'Soft delete');
     check((int)$db->queryOne('SELECT cms_deleted FROM v5_fixture') === 1, 'Delete persistence');
     check(PEAR::isError($db->query('SELECT missing_fixture_column FROM v5_fixture')), 'Query failure stays a PEAR error, not a mysqli exception');
+
+    // Exercise model callers directly, without form export converting blanks.
+    foreach (['empty'=>'', 'literal-null'=>'null', 'PHP-null'=>null, 'MST'=>'2026-01-12 12:00:00', 'MDT'=>'2026-07-12 12:00:00'] as $case=>$value) {
+        $timed = new V5Fixture();
+        $timed->title = '';
+        $timed->scheduled = '';
+        $timed->timed_start = $timed->timed_end = $value;
+        $id = $timed->insert();
+        check(is_numeric($id) && $id > 0, "$case timed insert");
+        $row = result($db->queryRow('SELECT * FROM v5_fixture WHERE id=' . (int)$id, null, MDB2_FETCHMODE_ASSOC));
+        $expected = in_array($case, ['MST', 'MDT'], true) ? $value : null;
+        check($row['timed_start'] === $expected && $row['timed_end'] === $expected, "$case inserted timed values");
+        check($row['title'] === '' && $row['scheduled'] === '0000-00-00 00:00:00', "$case ordinary blank fields unchanged");
+        $timed->timed_start = $timed->timed_end = '2026-01-12 12:00:00';
+        result($timed->update());
+        $row = result($db->queryRow('SELECT * FROM v5_fixture WHERE id=' . (int)$id, null, MDB2_FETCHMODE_ASSOC));
+        check($row['timed_start'] === '2026-01-12 19:00:00' && $row['timed_end'] === '2026-01-12 19:00:00', "$case MST to UTC");
+        $timed->timed_start = $timed->timed_end = $value;
+        result($timed->update());
+        $expected = in_array($case, ['PHP-null', 'MST'], true) ? '2026-01-12 19:00:00' : ($case === 'MDT' ? '2026-07-12 18:00:00' : null);
+        $row = result($db->queryRow('SELECT * FROM v5_fixture WHERE id=' . (int)$id, null, MDB2_FETCHMODE_ASSOC));
+        check($row['timed_start'] === $expected && $row['timed_end'] === $expected, "$case NULL/skip/UTC update");
+        for ($repeat = 1; $repeat <= 2; $repeat++) {
+            $timed->timed_start = $timed->timed_end = '';
+            result($timed->update());
+            $row = result($db->queryRow('SELECT * FROM v5_fixture WHERE id=' . (int)$id, null, MDB2_FETCHMODE_ASSOC));
+            check($row['timed_start'] === null && $row['timed_end'] === null, "$case repeated blank clear $repeat");
+        }
+    }
 } finally {
     result($db->exec('DROP TABLE v5_fixture'));
 }

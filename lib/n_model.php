@@ -695,6 +695,11 @@ class NModel extends NObject implements ArrayAccess {
 				$val_str .= $db->quote($this->$k, 'text');
 				continue;
 			}
+			// Blank timed dates remain SQL NULL.
+			if (($k == 'timed_start' || $k == 'timed_end') && $this->$k == '') {
+				$val_str .= 'NULL';
+				continue;
+			}
 			// add the value as an ints
 			if (is_numeric($this->$k)) {
 				$val_str .= $this->$k;
@@ -767,6 +772,11 @@ class NModel extends NObject implements ArrayAccess {
 			// add the value as a string
 			if ($def & N_DAO_STR) {
 				$set_str .= $k . '=' . $db->quote($this->$k);
+				continue;
+			}
+			// Blank timed dates remain SQL NULL.
+			if (($k == 'timed_start' || $k == 'timed_end') && $this->$k == '') {
+				$set_str .= $k . '=NULL';
 				continue;
 			}
 			// add the value as an int
