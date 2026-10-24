@@ -10,20 +10,34 @@
 
 #header {
   position: relative;
-  height: 96px;
-  background: #AAA url(/nterchange/images/bg_header.gif) repeat-x;
+  height: 76px;
+  background-color: #b2b2b2;
 }
 
 #logo {
-  padding: 20px 20px 18px;
+  font-size: 21px;
+  padding: 15px 20px;
+  line-height: 21px;
+  letter-spacing: 0.03em;
+  font-style: italic;
+  margin-right: 20px;
+  font-weight: 300;
 }
 
-#logo a {
-  color: #fff;
+#logo a,
+#header #logout {
+  color: #292929;
+}
+
+#logo a:focus-visible,
+#header #logout a:focus-visible,
+#footer a:focus-visible {
+  outline: 2px solid #292929;
+  outline-offset: 3px;
 }
 
 .n-orange {
-  color: #F71;
+  color: #743000;
 }
 
 #container {
@@ -79,8 +93,8 @@
   margin-top: 15px;
   height: 38px;
   width: 100%;
-  background: #AAA url(/nterchange/images/bg_footer.gif) repeat-x;
-  color: #fff;
+  background-color: #b2b2b2;
+  color: #292929;
   font-weight: 300;
   font-size: 14px;
 }
@@ -90,7 +104,7 @@
 }
 
 #credit {
-  width: 125px;
+  width: 155px;
   padding: 12px 10px;
   float: right;
 }

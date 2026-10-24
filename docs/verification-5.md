@@ -41,6 +41,33 @@ NView/Smarty. They verify local dependency URLs, loading order and shipped file
 bytes. Existing resource-helper warnings remain visible. Actual browser script
 execution, CSP responses and application interaction still need consumer tests.
 
+### Flat CMS presentation
+
+`php tests/layout-branding.php` passes 106 actual NView/Smarty checks on PHP
+8.5.12 without authentication, sessions or site data. It renders login/default/
+plain/simple layouts, text branding, one header/navigation, the right-class
+Admin link, all four Site Admin permission combinations and unchanged action
+URLs. Existing Users/Templates/Assets controls remain inside their panes.
+The rendered screen URL includes its file timestamp; changed layout/list
+imports use `5-flat-1`. Compatibility GIF files remain shipped.
+
+An owned, sessionless HTTP fixture also rendered the shared layout and Alaris's
+committed default/navigation overrides through the normally generated Composer
+loader. Chromium checks covered the 76px desktop header, right-aligned Admin,
+horizontal actions, keyboard focus, 240px toolbar wrapping and long login names.
+The orange action background stays `#ee7722`; `#292929` labels give 5.06:1
+contrast. Body/row fonts and padding are unchanged. Narrow 480px viewports retain
+the legacy 600px shell and horizontal scrolling. A 702px CSS viewport at DPR 2
+checks the layout equivalent of 200% zoom on a 1404px viewport; this is not a
+claim of native browser zoom-control testing or whole-CMS responsiveness.
+
+Normal warm reload changed the rendered screen timestamp and both imported
+CSS keys, replacing a cached 96px raster header with the flat 76px header.
+CKEditor 4.10, the Alaris form-upload configuration and image/media picker
+shells loaded in that fixture. These checks do not test site login, real
+uploads, database saves or production. Retained picker/Surf to Edit tests cover
+the unchanged callbacks and toolbar rules separately.
+
 The database tests exercise actual MDB2 schema inspection and model insert,
 read, update, repeated SQL NULL clears, UTC conversion, soft delete and error
 returns. The application integration adds the real application's Text factory

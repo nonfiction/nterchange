@@ -1,9 +1,13 @@
-{if $user_level >= 2}
-<p><a href="{url_for action='clear_all_cache'}"><img src="/nterchange/images/clear_all_caches.gif" alt="Clear All Caches" border="0" /></a></p>
-{/if}
+{if $page_edit || $user_level >= 2}
+<p class="btn-toolbar site-admin-actions">
 {if $page_edit}
-<p><a href="{url_for controller='page' action='surftoedit' id=1}" rel="blank"><img src="/nterchange/images/surf_to_edit.gif" alt="Surf to Edit" border="0" /></a></p>
-<p><a href="{url_for controller='page' action='create' referer=1}"><img src="/nterchange/images/new_page.gif" alt="New Page" border="0" /></a></p>
+<a href="{url_for controller='page' action='surftoedit' id=1}" rel="blank" class="btn btn-sm"><i aria-hidden="true">&#x25F0;</i> Surf to Edit</a>
+<a href="{url_for controller='page' action='create' referer=1}" class="btn btn-sm"><i aria-hidden="true">+</i> New Page</a>
+{/if}
+{if $user_level >= 2}
+<a href="{url_for action='clear_all_cache'}" class="btn btn-sm"><i aria-hidden="true">&#x21ba;</i> Clear All Caches</a>
+{/if}
+</p>
 {/if}
 
 {$content}

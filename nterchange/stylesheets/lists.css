@@ -94,7 +94,7 @@ div.list ul.pageContentList li {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 27px;
+  min-height: 25px;
   font-size: 10px;
   color: #000;
   padding: 0 32px 0 20px;
@@ -107,55 +107,68 @@ div.list ul.pageContentList li {
 }
 
 #navigation ul {
-	height:27px;
-	margin:0;
-	padding:0;
+  display: flow-root;
+  margin: 0;
+  padding: 0;
 }
+
 #navigation ul li {
-	display:inline;
-	list-style-type:none;
+  display: inline;
+  list-style-type: none;
 }
-#navigation ul li a, #navigation ul li a:link, #navigation ul li a:visited, #navigation ul li a:hover {
-	text-decoration:none;
-	color:#333;
-}
+
 #navigation ul li a {
-	width:70px;
-	margin:1px -1px 0px 2px;
-	padding:7px 0px 5px 0px;
-	border:0;
+  display: block;
+  float: left;
+  margin-right: 1px;
+  width: 70px;
+  padding: 7px 0 6px;
+  font: 10px/12px Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
 
-	position:relative;
-	top:0;
-	z-index:1;
-	display:block;
-	float:left;
-
-	font:10px Tahoma, Verdana, Arial, Helvetica, sans-serif;
-	color:#444;
-	text-align:center;
-	text-decoration:none;
-	white-space:nowrap;
-}
-#navigation ul li a:link, #navigation ul li a:visited {
-	background:url(/nterchange/images/tab_off.gif) no-repeat;
-}
-#navigation ul li a:hover, #navigation ul li a:active {
-	background:url(/nterchange/images/tab_over.gif) no-repeat;
-}
 #navigation ul li a.right {
-	float:right;
+  float: right;
 }
+
+#navigation ul li a:link,
+#navigation ul li a:visited {
+  color: #333;
+  background-color: #d4d4d4;
+}
+
+#navigation ul li a:hover,
+#navigation ul li a:active {
+  background-color: #dedede;
+}
+
 #navigation ul li a.current {
-	width:72px;
-	background:url(/nterchange/images/tab_on.gif) no-repeat transparent;
-	z-index:3;
-	margin:1px -1px -3px 2px;
-	padding:7px 0px 6px 0px;
-	top:0px;
+  background-color: #f2f2f2;
 }
-#navigation ul li a.current:visited, #navigation ul li a.current:hover, #navigation ul li a.current:active {
-	background:url(/nterchange/images/tab_on.gif) no-repeat transparent;
+
+#navigation ul li a:focus-visible {
+  outline: 2px solid #292929;
+  outline-offset: -3px;
+}
+
+/* Keep wrapped tabs below branding on the legacy minimum-width shell. */
+@media (max-width: 760px) {
+  #header {
+    height: auto;
+    min-height: 76px;
+  }
+
+  #navigation {
+    position: static;
+  }
+
+  #header #logout {
+    float: none;
+    padding-bottom: 0;
+    overflow-wrap: anywhere;
+  }
 }
 
 #subnav ul {
@@ -229,12 +242,38 @@ div.list ul.pageContentList li {
 .btn,
 a.btn {
   background-color: #E72;
-  color: white;
+  color: #292929;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   padding: 4px 6px;
   border: 1px solid #ddd;
   margin-right: 2px;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #f8944d;
+  color: #292929;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #292929;
+  outline-offset: 2px;
+}
+
+.site-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.site-admin-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  box-sizing: border-box;
+  margin-right: 0;
 }
 
 .btn-sm {

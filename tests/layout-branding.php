@@ -40,24 +40,36 @@ try {
     foreach (['login', 'default', 'plain', 'simple'] as $layout) {
         $authenticated = $layout !== 'login';
         $view->assign('login_name', $authenticated ? 'Owned fixture' : '');
-        $view->assign('navigation', $authenticated ? [['controller' => 'site_admin', 'action' => 'index', 'id' => '', 'title' => 'Site Admin', 'class' => 'current', 'target' => '']] : []);
+        $navigation = [];
+        foreach (['dashboard' => 'Dashboard', 'site_admin' => 'Site Admin', 'content' => 'Content', 'admin' => 'Admin'] as $name => $title) {
+            $navigation[] = ['controller' => $name, 'action' => 'index', 'id' => '', 'title' => $title, 'class' => $name === 'admin' ? 'right' : ($name === 'site_admin' ? 'current' : ''), 'target' => ''];
+        }
+        $view->assign('navigation', $authenticated ? $navigation : []);
         $html = $view->fetch(NTERCHANGE_DIR . '/app/views/layouts/' . $layout . '.html');
         same(1, substr_count($html, 'id="header"'));
         same(1, substr_count($html, 'id="logo"'));
         same($authenticated ? 1 : 0, substr_count($html, 'id="logout"'));
         same($authenticated ? 1 : 0, substr_count($html, 'id="navigation"'));
-        same(true, str_contains($html, 'src="/nterchange/images/nterchange.gif" alt="nterchange" width="149" height="29"'));
-        if ($layout !== 'simple') same(true, str_contains($html, 'src="/nterchange/images/created_by.gif" alt="created by nonfiction" width="111" height="13"'));
+        same(true, str_contains($html, '<a href="/nterchange/"><span class="n-orange">n</span>terchange</a>'));
+        same(false, str_contains($html, '/images/nterchange.gif'));
+        if ($layout !== 'simple') same(true, str_contains($html, '>created by nonfiction</a>'));
+        same(true, str_contains($html, '/nterchange/stylesheets/screen.css?' . filemtime(NTERCHANGE_DIR . '/nterchange/stylesheets/screen.css')));
         same(true, str_contains($html, '<form name="login_form">'));
-        if ($authenticated) same(true, strpos($html, 'id="navigation"') < strpos($html, 'id="container"'));
+        if ($authenticated) {
+            same(true, strpos($html, 'id="navigation"') < strpos($html, 'id="container"'));
+            same(true, str_contains($html, 'href="/nterchange/admin/index/" class="right">Admin</a>'));
+        }
     }
-    foreach ([[3, true, ['clear_all_caches', 'surf_to_edit', 'new_page']], [1, true, ['surf_to_edit', 'new_page']], [3, false, ['clear_all_caches']], [1, false, []]] as [$level, $edit, $expected]) {
+    foreach ([[3, true, ['Surf to Edit', 'New Page', 'Clear All Caches']], [1, true, ['Surf to Edit', 'New Page']], [3, false, ['Clear All Caches']], [1, false, []]] as [$level, $edit, $expected]) {
         $view->assign(['user_level' => $level, 'page_edit' => $edit, 'content' => '', 'sitemap_list' => '<ul id="fixture-tree"></ul>']);
         $html = $view->fetch(NTERCHANGE_DIR . '/app/views/site_admin/site_admin.html');
-        preg_match_all('~<p><a[^>]+href="([^"]+)"[^>]*><img src="/nterchange/images/([a-z_]+)\.gif"~', $html, $matches);
+        preg_match_all('~<a\b[^>]*href="([^"]+)"[^>]*class="btn btn-sm"[^>]*><i aria-hidden="true">[^<]+</i> ([^<]+)</a>~', $html, $matches);
         same($expected, $matches[2]);
-        $urls = ['clear_all_caches' => '/nterchange/site_admin/clear_all_cache', 'surf_to_edit' => '/nterchange/page/surftoedit/1', 'new_page' => '/nterchange/page/create'];
+        $urls = ['Clear All Caches' => '/nterchange/site_admin/clear_all_cache', 'Surf to Edit' => '/nterchange/page/surftoedit/1', 'New Page' => '/nterchange/page/create'];
         same(array_map(fn($name) => $urls[$name], $expected), $matches[1]);
+        same($expected ? 1 : 0, substr_count($html, 'class="btn-toolbar site-admin-actions"'));
+        same(false, str_contains($html, '<img'));
+        same($edit, str_contains($html, 'rel="blank"'));
         same(true, str_contains($html, '<ul id="fixture-tree">'));
     }
     foreach (['users' => 'Users', 'page_template' => 'Templates', 'cms_asset_info' => 'Assets'] as $asset => $name) {
@@ -73,8 +85,8 @@ try {
         same(true, strpos($html, 'class="pane"') < strpos($html, 'class="control"'));
     }
     $screen = file_get_contents(NTERCHANGE_DIR . '/nterchange/stylesheets/screen.css');
-    same(true, str_contains($screen, 'layout.css?v=5-layout-1'));
-    same(true, str_contains($screen, 'lists.css?v=5-layout-1'));
+    same(true, str_contains($screen, 'layout.css?v=5-flat-1'));
+    same(true, str_contains($screen, 'lists.css?v=5-flat-1'));
     foreach (['nterchange' => [149, 29], 'created_by' => [111, 13], 'clear_all_caches' => [110, 15], 'surf_to_edit' => [81, 15], 'new_page' => [62, 15], 'bg_header' => [96, 96], 'bg_footer' => [38, 38], 'tab_off' => [70, 25], 'tab_on' => [72, 27], 'tab_over' => [70, 25]] as $name => $size) {
         $path = NTERCHANGE_DIR . '/nterchange/images/' . $name . '.gif';
         same(true, is_file($path));
