@@ -762,7 +762,8 @@ class HTML_QuickForm extends HTML_Common
         if (isset($this->_elementIndex[$element])) {
             return $this->_elements[$this->_elementIndex[$element]];
         } else {
-            $error = PEAR::raiseError(null, QUICKFORM_NONEXIST_ELEMENT, null, E_USER_WARNING, "Element '$element' does not exist in HTML_QuickForm::getElement()", 'HTML_QuickForm_Error', true);
+            $pear = new PEAR();
+            $error = $pear->raiseError(null, QUICKFORM_NONEXIST_ELEMENT, null, E_USER_WARNING, "Element '$element' does not exist in HTML_QuickForm::getElement()", 'HTML_QuickForm_Error', true);
             return $error;
         }
     } // end func getElement
@@ -1006,7 +1007,8 @@ class HTML_QuickForm extends HTML_Common
     function &removeElement($elementName, $removeRules = true)
     {
         if (!isset($this->_elementIndex[$elementName])) {
-            $error = PEAR::raiseError(null, QUICKFORM_NONEXIST_ELEMENT, null, E_USER_WARNING, "Element '$elementName' does not exist in HTML_QuickForm::removeElement()", 'HTML_QuickForm_Error', true);
+            $pear = new PEAR();
+            $error = $pear->raiseError(null, QUICKFORM_NONEXIST_ELEMENT, null, E_USER_WARNING, "Element '$elementName' does not exist in HTML_QuickForm::removeElement()", 'HTML_QuickForm_Error', true);
             return $error;
         }
         $el =& $this->_elements[$this->_elementIndex[$elementName]];
@@ -1947,7 +1949,7 @@ class HTML_QuickForm extends HTML_Common
      * @return bool     whether $value is an error
      * @static
      */
-    function isError($value)
+    static function isError($value)
     {
         return (is_object($value) && is_a($value, 'html_quickform_error'));
     } // end func isError
@@ -1963,7 +1965,7 @@ class HTML_QuickForm extends HTML_Common
      * @return  string  error message
      * @static
      */
-    function errorMessage($value)
+    static function errorMessage($value)
     {
         // make the variable static so that it only has to do the defining on the first call
         static $errorMessages;
@@ -2026,13 +2028,13 @@ class HTML_QuickForm_Error extends PEAR_Error {
     * @param int   $level intensity of the error (PHP error code)
     * @param mixed $debuginfo any information that can inform user as to nature of the error
     */
-    function HTML_QuickForm_Error($code = QUICKFORM_ERROR, $mode = PEAR_ERROR_RETURN,
+    function __construct($code = QUICKFORM_ERROR, $mode = PEAR_ERROR_RETURN,
                          $level = E_USER_NOTICE, $debuginfo = null)
     {
         if (is_int($code)) {
-            $this->PEAR_Error(HTML_QuickForm::errorMessage($code), $code, $mode, $level, $debuginfo);
+            parent::__construct(HTML_QuickForm::errorMessage($code), $code, $mode, $level, $debuginfo);
         } else {
-            $this->PEAR_Error("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
+            parent::__construct("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
         }
     }
 
