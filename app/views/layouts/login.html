@@ -1,5 +1,4 @@
 {include file="layouts/head" layout="login"}
-{include file="layouts/navigation"}
 {literal}<script>document.observe("dom:loaded", function() { document.login_form.username.focus(); });</script>{/literal}
 
 {if $_FLASH_.notice}<div id="notice">{$_FLASH_.notice}</div>{/if}
