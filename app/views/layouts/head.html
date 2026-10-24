@@ -36,6 +36,12 @@
   {javascript_include_tag src=page_content}
   {javascript_include_tag src=page}
   {javascript_include_tag src=ckeditor/ckeditor}
+  {php}
+  $editorConfig = DOCUMENT_ROOT . '/javascripts/ckeditor_config.js';
+  if (is_file($editorConfig)) {
+      echo '<script>CKEDITOR.config.customConfig = ' . json_encode('/javascripts/ckeditor_config.js?' . filemtime($editorConfig)) . ';</script>';
+  }
+  {/php}
   {/if}
 
   {$HEADER}
