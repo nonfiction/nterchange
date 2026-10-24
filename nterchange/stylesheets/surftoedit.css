@@ -46,6 +46,7 @@
 }
 
 .page-edit {
+  max-width: 100vw;
   position: relative;
   z-index: 9999;
   background-color: #f8f8f8;
@@ -55,24 +56,42 @@
   font-size: 10px;
 }
 
-.page-edit a {
-  color: #777777;
+.page-edit .container {
+  width: auto;
+  max-width: 980px;
+  padding: 0 12px;
+}
+
+.page-edit a,
+.page-edit a:visited {
+  color: #666666;
   padding: 4px 8px 4px 0;
   display: inline-block;
   text-decoration: none;
 }
 
+.page-edit a:hover,
+.page-edit a:focus {
+  color: #333333;
+  text-decoration: underline;
+}
+
+.page-edit a:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 .page-edit .surftoedit-logo {
   font-size: 1.4em;
   text-transform: none;
-  color: #777777;
+  color: #666666;
   letter-spacing: 0.03em;
   font-style: italic;
   margin-right: 20px;
 }
 
-.surftoedit-white {
-  color: #777777;
+.page-edit .surftoedit-white {
+  color: #666666;
 }
 .surftoedit-reverse {
   -webkit-transform: rotateY(180deg); /* Chrome, Safari, Opera */
