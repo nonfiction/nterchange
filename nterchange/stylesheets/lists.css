@@ -242,7 +242,7 @@ div.list ul.pageContentList li {
 .btn,
 a.btn {
   background-color: #E72;
-  color: #292929;
+  color: #fff;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   padding: 4px 6px;
@@ -253,7 +253,7 @@ a.btn {
 .btn:hover,
 .btn:active {
   background-color: #f8944d;
-  color: #292929;
+  color: #fff;
 }
 
 .btn:focus-visible {

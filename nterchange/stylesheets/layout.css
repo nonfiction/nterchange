@@ -24,7 +24,10 @@
   font-weight: 300;
 }
 
-#logo a,
+#logo a {
+  color: #fff;
+}
+
 #header #logout {
   color: #292929;
 }
@@ -37,7 +40,7 @@
 }
 
 .n-orange {
-  color: #743000;
+  color: #F71;
 }
 
 #container {

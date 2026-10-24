@@ -49,14 +49,17 @@ plain/simple layouts, text branding, one header/navigation, the right-class
 Admin link, all four Site Admin permission combinations and unchanged action
 URLs. Existing Users/Templates/Assets controls remain inside their panes.
 The rendered screen URL includes its file timestamp; changed layout/list
-imports use `5-flat-1`. Compatibility GIF files remain shipped.
+imports use `5-flat-2`. Compatibility GIF files remain shipped.
 
 An owned, sessionless HTTP fixture also rendered the shared layout and Alaris's
 committed default/navigation overrides through the normally generated Composer
 loader. Chromium checks covered the 76px desktop header, right-aligned Admin,
 horizontal actions, keyboard focus, 240px toolbar wrapping and long login names.
-The orange action background stays `#ee7722`; `#292929` labels give 5.06:1
-contrast. Body/row fonts and padding are unchanged. Narrow 480px viewports retain
+The orange action background stays `#ee7722`. The initial dark labels gave
+5.06:1 contrast. Jon explicitly requested production-matching white labels and
+a white/orange logo during visual review; those colors now replace the dark
+variant. White button labels have only 2.88:1 contrast on this orange. Keyboard
+focus outlines remain dark and visible. Body/row fonts and padding are unchanged. Narrow 480px viewports retain
 the legacy 600px shell and horizontal scrolling. A 702px CSS viewport at DPR 2
 checks the layout equivalent of 200% zoom on a 1404px viewport; this is not a
 claim of native browser zoom-control testing or whole-CMS responsiveness.

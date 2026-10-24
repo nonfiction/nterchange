@@ -85,8 +85,8 @@ try {
         same(true, strpos($html, 'class="pane"') < strpos($html, 'class="control"'));
     }
     $screen = file_get_contents(NTERCHANGE_DIR . '/nterchange/stylesheets/screen.css');
-    same(true, str_contains($screen, 'layout.css?v=5-flat-1'));
-    same(true, str_contains($screen, 'lists.css?v=5-flat-1'));
+    same(true, str_contains($screen, 'layout.css?v=5-flat-2'));
+    same(true, str_contains($screen, 'lists.css?v=5-flat-2'));
     foreach (['nterchange' => [149, 29], 'created_by' => [111, 13], 'clear_all_caches' => [110, 15], 'surf_to_edit' => [81, 15], 'new_page' => [62, 15], 'bg_header' => [96, 96], 'bg_footer' => [38, 38], 'tab_off' => [70, 25], 'tab_on' => [72, 27], 'tab_over' => [70, 25]] as $name => $size) {
         $path = NTERCHANGE_DIR . '/nterchange/images/' . $name . '.gif';
         same(true, is_file($path));
