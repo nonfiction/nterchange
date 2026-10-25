@@ -50,7 +50,7 @@ try {
         same(1, substr_count($html, 'id="logo"'));
         same($authenticated ? 1 : 0, substr_count($html, 'id="logout"'));
         same($authenticated ? 1 : 0, substr_count($html, 'id="navigation"'));
-        same(true, str_contains($html, '<a href="/nterchange/"><span class="n-orange">n</span>terchange</a>'));
+        same(true, str_contains($html, '<a href="/nterchange/">nter<span class="n-orange">change</span></a>'));
         same(false, str_contains($html, '/images/nterchange.gif'));
         if ($layout !== 'simple') same(true, str_contains($html, '>created by nonfiction</a>'));
         same(true, str_contains($html, '/nterchange/stylesheets/screen.css?' . filemtime(NTERCHANGE_DIR . '/nterchange/stylesheets/screen.css')));
@@ -85,7 +85,7 @@ try {
         same(true, strpos($html, 'class="pane"') < strpos($html, 'class="control"'));
     }
     $screen = file_get_contents(NTERCHANGE_DIR . '/nterchange/stylesheets/screen.css');
-    same(true, str_contains($screen, 'layout.css?v=5-flat-2'));
+    same(true, str_contains($screen, 'layout.css?v=5-flat-3'));
     same(true, str_contains($screen, 'lists.css?v=5-flat-2'));
     foreach (['nterchange' => [149, 29], 'created_by' => [111, 13], 'clear_all_caches' => [110, 15], 'surf_to_edit' => [81, 15], 'new_page' => [62, 15], 'bg_header' => [96, 96], 'bg_footer' => [38, 38], 'tab_off' => [70, 25], 'tab_on' => [72, 27], 'tab_over' => [70, 25]] as $name => $size) {
         $path = NTERCHANGE_DIR . '/nterchange/images/' . $name . '.gif';

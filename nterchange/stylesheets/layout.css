@@ -97,12 +97,13 @@
   height: 38px;
   width: 100%;
   background-color: #b2b2b2;
-  color: #292929;
+  color: #fff;
   font-weight: 300;
   font-size: 14px;
 }
 
-#footer a {
+#footer a,
+#footer .n-orange {
   color: inherit;
 }
 
