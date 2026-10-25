@@ -71,6 +71,21 @@ shells loaded in that fixture. These checks do not test site login, real
 uploads, database saves or production. Retained picker/Surf to Edit tests cover
 the unchanged callbacks and toolbar rules separately.
 
+### Temporal model conditions
+
+`php tests/conditions-database.php` passes 23 checks per charset on PHP 8.5.12
+with real MDB2 and MySQL 8.4.13. Schema flags now select the existing driver
+quote call for DATE, DATETIME, TIME and TIMESTAMP predicates. The test covers
+negative 25-hour TIME, compact numeric DATE, soft-delete filtering, combined
+predicates, explicit filters, existing SQL conditions and escaped malformed
+values. Integer, decimal, text, PHP-null skip and literal-null behavior remain
+unchanged. The same test fails eight checks before the correction.
+
+The fixture uses synthetic rows in a caller-created disposable schema. No
+site import, HTTP, provider, mail or timezone policy is tested here. New
+Brighton's current program lookup uses explicitly quoted SQL; the reproduction
+is a generic model API defect, not a demonstrated active importer failure.
+
 The database tests exercise actual MDB2 schema inspection and model insert,
 read, update, repeated SQL NULL clears, UTC conversion, soft delete and error
 returns. The application integration adds the real application's Text factory
@@ -174,8 +189,9 @@ package's `tests/consumer.php`.
 
 For database checks, also supply the `DB_*` variables listed in the README and
 run `tests/database.php`, `tests/draft-database.php`,
-`tests/form-insert-database.php` or `tests/consumer-database.php`.
-All four refuse database names outside
+`tests/form-insert-database.php`, `tests/conditions-database.php` or
+`tests/consumer-database.php`.
+All five refuse database names outside
 `nterchange_v5_test_*`. Create fresh isolated schemas, one
 `latin1` and one `utf8mb4`, with no site data. The tests create and drop their
 named tables. Do not point them at an existing site's database, even a local

@@ -943,8 +943,8 @@ class NModel extends NObject implements ArrayAccess {
 				$query['conditions'] .= ' ' . $this->tableName(true) . ".$key IS NULL";
 				continue;
 			}
-			// if it's a string field in the db, then quote it
-			if ($def & N_DAO_STR) {
+			// Quote text and temporal fields using their schema types.
+			if ($def & (N_DAO_STR | N_DAO_DATE | N_DAO_TIME)) {
 				$query['conditions'] .= ' ' . $this->tableName(true) . ".$key" . '=' . $this->quote(($def & N_DAO_BOOL?(bool)$this->$key:$this->$key));
 				continue;
 			}
