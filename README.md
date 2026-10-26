@@ -1,14 +1,25 @@
-# nterchange 5.0 development candidate
+# nterchange 5.0
 
 Shared runtime for existing nterchange sites on PHP 8.5. This repository is a
-library, not a complete website. The 5.0 candidate keeps the global CMS classes,
+library, not a complete website. Version 5.0 keeps the global CMS classes,
 model/controller factories, QuickForm widgets and Smarty 2 templates. It carries
 the PHP 8 fixes tested in existing consumers without importing their content,
 configuration or site-specific models.
 
-No stable 5.0 release has been tagged. Pushing `main` does not authorize a site
-upgrade. See [migration notes](docs/migration-5.md) before replacing any vendor
-tree. Existing sites still run their own reviewed vendor variants.
+## Installation
+
+Require the stable release through [Packagist](https://packagist.org/packages/nonfiction/nterchange):
+
+```json
+{"require": {"nonfiction/nterchange": "5.0.0"}}
+```
+
+No custom Composer repository is needed. Commit the generated `composer.lock`
+and deploy with `composer install`, not `composer update`. Packagist supplies
+version metadata; GitHub supplies the package archive.
+
+Publishing a release does not authorize a site upgrade or deployment. See the
+[migration notes](docs/migration-5.md) before replacing an existing vendor tree.
 
 ## Requirements
 

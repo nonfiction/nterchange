@@ -8,9 +8,12 @@ installation.
 ## Composer and bootstrap
 
 1. Replace the old `nonfiction/nterchange_backend` or captured `vendor/nterchange`
-   dependency with `nonfiction/nterchange`. The candidate branch is `dev-main`,
-   aliased to `5.0.x-dev`. Pin a reviewed commit for adoption tests. A stable tag
-   and Packagist release still need separate approval.
+   dependency with `"nonfiction/nterchange": "5.0.0"`. Use Packagist, with no
+   nterchange VCS or local-path repository override. In an isolated source and
+   dependency tree, run `composer update nonfiction/nterchange --no-plugins
+   --no-scripts --prefer-dist` and review the generated lockfile. Preserve
+   unrelated dependencies. Commit the lockfile and use `composer install` for
+   subsequent installs. `dev-main` remains a development branch, not a release.
 2. Remove old CMS/PEAR classmaps, eager includes and include paths from the
    consumer manifest. Remove the old AWS SDK requirement if the site uses only
    local uploads. Do not remove a separately used dependency without checking
@@ -73,7 +76,7 @@ shared runtime fix.
 - Bundled PEAR supports the reached Auth/MDB2, QuickForm, Date, Cache Lite,
   file logging and MIME/PHP-mail paths. It is not a general PEAR distribution.
   Installers, alternate database drivers, CAPTCHA, hierarchy widgets, spreadsheet
-  export and unused mail transports are outside this candidate's support.
+  export and unused mail transports are outside this release's support.
 - The old AWS SDK is not installed. Legacy S3/mirror adapter source remains for
   reference, but remote upload/mirroring is unsupported and untested. Local
   upload configuration remains site-owned. No provider was contacted.
@@ -90,7 +93,7 @@ rows/files/sessions before and after cleanup. Do not infer site parity from the
 shared synthetic database fixture or class inheritance checks.
 
 PHP 8 notices/deprecations and legacy security debt remain. In particular, this
-candidate preserves legacy password/reset behavior and does not claim a new
+release preserves legacy password/reset behavior and does not claim a new
 CSRF, authorization, escaping or session-security review. The historical PEAR
 future-timezone boundary discrepancy also remains. Full security acceptance,
-human parity, release publication and production deployment need separate review.
+human parity and production deployment need separate review.

@@ -1,5 +1,5 @@
-version: "5.0.0-dev"
+version: "5.0.0"
 distribution: "https://github.com/nonfiction/nterchange"
 changelog: "https://github.com/nonfiction/nterchange/commits/main"
-release_date: "unreleased"
+release_date: "2026-10-26"
 website: "https://github.com/nonfiction/nterchange"

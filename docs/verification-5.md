@@ -1,4 +1,4 @@
-# 5.0 candidate verification
+# 5.0 verification
 
 Verified on PHP 8.5.12, Composer 2.10.3 and a separately created MySQL 8.4.13
 fixture. PHP probes had no external network. MySQL used an internal Docker
@@ -209,5 +209,6 @@ legacy resources and unsupported dependencies.
 Legacy password/reset/session behavior, authorization, CSRF and output escaping
 have not been accepted as secure. The known future PEAR timezone boundary gap
 is not fixed by the year-picker change. Mail transport behavior belongs to the
-host; tests here send no mail. Browser parity, human review, stable tagging,
-Packagist release approval, site adoption and production deployment remain open.
+host; tests here send no mail. A stable package release does not establish
+site acceptance. Each consumer still needs functional and human review at its
+installed release before production deployment.

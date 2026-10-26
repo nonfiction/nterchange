@@ -1,3 +1,10 @@
+## 5.0.0 (2026-10-26)
+
+* Publish the shared PHP 8.5 runtime as `nonfiction/nterchange` on Packagist.
+* Keep site overrides, bundled Smarty and the curated PEAR runtime.
+* Include the reviewed form, draft, timed-date, cache, editor and CMS layout fixes.
+* Require separate site acceptance and production deployment review. See the migration and verification notes under `docs/`.
+
 ## 4.0.0
 
 * Reboot repository. Remove old SQL, passwords, deprecated files
