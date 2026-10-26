@@ -62,13 +62,16 @@ function check($ok, $label) {
     if (!$ok) throw new \RuntimeException($label);
     $checks++;
 }
+// A failed save must not exit through the success redirect.
 register_shutdown_function(function () {
-    if ($GLOBALS['checks'] !== 26) throw new \RuntimeException('Controller exited before rendering rejected form');
+    if ((error_get_last()['type'] ?? null) === E_ERROR) return;
+    if ($GLOBALS['checks'] !== 44) throw new \RuntimeException('Controller exited before rendering rejected form');
 });
 foreach ([false, 0] as $failure) {
     foreach (['/nterchange/page/content/42', null] as $referer) {
         ControllerForm::$result = $failure;
         $_POST = ['cms_headline' => 'Unsaved <headline>', 'content' => "<p>Unsaved & text</p>\r\n", '__submit__' => 'Save'];
+        $_POST['timed_start'] = $_POST['timed_end'] = ['Y'=>'', 'm'=>'', 'd'=>'', 'H'=>'', 'i'=>''];
         $controller = new FixtureController();
         $controller->params = ['asset' => 'text', 'template_container_id' => 3];
         if ($referer !== null) {
@@ -84,9 +87,21 @@ foreach ([false, 0] as $failure) {
         check(str_contains($html, 'Unsaved &lt;headline&gt;'), 'Retain escaped headline');
         check(str_contains($html, '&lt;p&gt;Unsaved &amp; text&lt;/p&gt;'), 'Retain escaped body');
         check($controller->rendered === ['action' => 'form', 'layout' => 'default'], 'Render editable form');
+        foreach (['timed_start', 'timed_end'] as $field) {
+            foreach (['H', 'i'] as $part) {
+                check((bool) preg_match('/<select name="' . $field . '\\[' . $part . '\\]">\\s*<option value="" selected="selected">/', $html), 'Retain blank schedule ' . $field . ' ' . $part);
+            }
+        }
         if ($referer !== null) {
             check(str_contains($html, 'value="' . urlencode($referer) . '"'), 'Retain return URL for retry');
         }
     }
+}
+$form = new \NQuickForm('midnight_fixture');
+$date = $form->addElement('date', 'midnight', 'Date', ['format'=>'Y-m-d H:i', 'addEmptyOption'=>true]);
+$date->setValue(['Y'=>'2027', 'm'=>'01', 'd'=>'15', 'H'=>'00', 'i'=>'00']);
+$html = $date->toHTML();
+foreach (['H', 'i'] as $part) {
+    check((bool) preg_match('/<select name="midnight\\[' . $part . '\\]">.*?<option value="0" selected="selected">/s', $html), 'Midnight remains zero, not blank');
 }
 echo "PASS $checks Add New Content failure/controller/widget checks (simulated persistence/auth)\n";

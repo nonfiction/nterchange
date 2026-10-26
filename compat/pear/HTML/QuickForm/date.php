@@ -439,7 +439,11 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
 
     function setValue($value)
     {
-        $trimLeadingZeros = function ($a) { $b = ltrim($a, '0'); return strlen($b) ? $b : '0'; };
+        $trimLeadingZeros = function ($a) {
+            if ($a === '') return '';
+            $b = ltrim($a, '0');
+            return strlen($b) ? $b : '0';
+        };
         if (empty($value)) {
             $value = array();
         } elseif (is_scalar($value)) {

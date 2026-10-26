@@ -8,10 +8,11 @@ container, database, upload directory or session was used.
 ## Add New Content insert rejection
 
 `php tests/page-content-insert.php` exercises the actual controller and
-QuickForm with simulated persistence/auth. All 26 checks pass on PHP 8.5.12.
+QuickForm with simulated persistence/auth. All 44 checks pass on PHP 8.5.12.
 A false or zero insert result returns HTTP 503 with a visible error and an
 editable form instead of a success redirect. Headline, body and return URL
-survive for retry. Browsers cannot retain the file input, so the error asks
+survive for retry. Blank date parts stay blank rather than becoming midnight;
+explicit midnight still selects zero. Browsers cannot retain the file input, so the error asks
 users to select files again. Successful saves keep their existing redirect.
 
 The PetroChina consumer also tests an actual multipart Feature submission
