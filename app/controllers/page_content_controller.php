@@ -220,19 +220,23 @@ class PageContentController extends nterchangeController {
         }
         unset($page);
         unset($model);
+        if (isset($this->params['_referer']) && $this->params['_referer']) {
+          $referer = urldecode($this->params['_referer']);
+        } else {
+          include_once 'view/helpers/url_helper.php';
+          $referer = urlHelper::urlFor($this, array('controller'=>'page', 'action'=>'surftoedit', 'id'=>$parameter));
+        }
+        header('Location:' . $referer);
+        exit;
       }
-      if (isset($this->params['_referer']) && $this->params['_referer']) {
-        $referer = urldecode($this->params['_referer']);
-      } else {
-        include_once 'view/helpers/url_helper.php';
-        $referer = urlHelper::urlFor($this, array('controller'=>'page', 'action'=>'surftoedit', 'id'=>$parameter));
+      http_response_code(503);
+      if ($referer) {
+        $form->_submitValues['_referer'] = $referer;
       }
-      header('Location:' . $referer);
-      exit;
-    } else {
-      if ($asset_model) {
-        $this->set(array('form'=>$form->toHTML(), 'asset'=>$asset_controller->name, 'asset_name'=>Inflector::humanize($asset_controller->name)));
-      }
+      $form->addElement('cmserror', null, 'Content could not be saved. Your entries are still in the form. Please select any files again before retrying.');
+    }
+    if ($asset_model) {
+      $this->set(array('form'=>$form->toHTML(), 'asset'=>$asset_controller->name, 'asset_name'=>Inflector::humanize($asset_controller->name)));
     }
     $this->auto_render = false;
     $this->page_title = 'Add New Content to &quot;' . $page_model->title . '&quot;';

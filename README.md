@@ -11,7 +11,7 @@ configuration or site-specific models.
 Require the stable release through [Packagist](https://packagist.org/packages/nonfiction/nterchange):
 
 ```json
-{"require": {"nonfiction/nterchange": "5.0.0"}}
+{"require": {"nonfiction/nterchange": "5.0.1"}}
 ```
 
 No custom Composer repository is needed. Commit the generated `composer.lock`

@@ -5,6 +5,19 @@ fixture. PHP probes had no external network. MySQL used an internal Docker
 network, no published ports and disposable tmpfs data. No existing site
 container, database, upload directory or session was used.
 
+## Add New Content insert rejection
+
+`php tests/page-content-insert.php` exercises the actual controller and
+QuickForm with simulated persistence/auth. All 26 checks pass on PHP 8.5.12.
+A false or zero insert result returns HTTP 503 with a visible error and an
+editable form instead of a success redirect. Headline, body and return URL
+survive for retry. Browsers cannot retain the file input, so the error asks
+users to select files again. Successful saves keep their existing redirect.
+
+The PetroChina consumer also tests an actual multipart Feature submission
+against a rejecting MySQL trigger in an independent no-egress copy. No original
+site database, upload, session or mail service is used for failure injection.
+
 ## Results
 
 | Check | Result | Limit |
