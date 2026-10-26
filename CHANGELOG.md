@@ -1,3 +1,8 @@
+## 5.0.1 (2026-10-26)
+
+* Keep rejected Add New Content submissions on an editable form with HTTP 503 and a visible error instead of a success redirect. Ask users to reselect files before retrying.
+* Preserve blank date selections when redisplaying forms without changing explicit midnight values.
+
 ## 5.0.0 (2026-10-26)
 
 * Publish the shared PHP 8.5 runtime as `nonfiction/nterchange` on Packagist.
