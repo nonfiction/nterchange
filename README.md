@@ -46,6 +46,12 @@ configuration. Autoloading defines `NTERCHANGE_DIR` and loads Smarty, but starts
 no session and makes no database, HTTP or mail calls. Site configuration still
 owns `ROOT_DIR`, admin routing, cache/upload paths, timezone and environment.
 
+Set PHP's default timezone and `SITE_TIME_ZONE` consistently. Legacy PEAR date
+conversion uses PHP's active timezone to detect daylight saving. For fixed
+UTC-06:00 year-round, use `Etc/GMT+6` in both settings. The `Etc/GMT` names
+reverse the offset sign; this zone has no seasonal clock change. This setting
+does not rewrite stored UTC timestamps or change external job schedules.
+
 `NTERCHANGE_DIR` is the package directory regardless of its Composer install
 path. The installed package is normally `vendor/nonfiction/nterchange`.
 Application model/controller/helper overrides retain priority through the

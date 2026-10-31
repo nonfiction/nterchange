@@ -13,6 +13,8 @@ define('UPLOAD_DIR', '/uploads');
 define('ASSET_DIR', $work . '/app');
 define('DEBUG_LEVEL', 0);
 define('SITE_TIME_ZONE', 'MST7MDT');
+// PEAR's DST detection reads PHP's active timezone, as configured by real sites.
+NConfig::setTimezone(SITE_TIME_ZONE);
 define('IN_NTERCHANGE', false);
 $_SERVER['SERVER_NAME'] = 'package.invalid';
 $_SERVER['REQUEST_METHOD'] = 'GET';

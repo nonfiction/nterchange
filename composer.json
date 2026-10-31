@@ -23,6 +23,6 @@
     "branch-alias": {"dev-main": "5.0.x-dev"}
   },
   "scripts": {
-    "test": ["@php tests/runtime.php", "@php tests/audit-year.php", "@php tests/pagination-mail.php", "@php tests/cache.php", "@php tests/layout-assets.php", "@php tests/page-content-insert.php", "@php tests/filesystem-downloads.php"]
+    "test": ["@php tests/runtime.php", "@php tests/timezones.php", "@php tests/audit-year.php", "@php tests/pagination-mail.php", "@php tests/cache.php", "@php tests/layout-assets.php", "@php tests/page-content-insert.php", "@php tests/filesystem-downloads.php"]
   }
 }
