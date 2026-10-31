@@ -1,3 +1,8 @@
+## 5.0.2 (2026-10-31)
+
+* Fix download-icon rendering on PHP 8.5 by declaring the stateless filesystem and image-tag methods static. Keep instance helper calls working.
+* Test actual icon images, default icons, filesize/download-time modifiers and complete Smarty output without site bootstrap.
+
 ## 5.0.1 (2026-10-26)
 
 * Keep rejected Add New Content submissions on an editable form with HTTP 503 and a visible error instead of a success redirect. Ask users to reselect files before retrying.

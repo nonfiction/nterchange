@@ -8,7 +8,7 @@ installation.
 ## Composer and bootstrap
 
 1. Replace the old `nonfiction/nterchange_backend` or captured `vendor/nterchange`
-   dependency with `"nonfiction/nterchange": "5.0.1"`. Use Packagist, with no
+   dependency with `"nonfiction/nterchange": "5.0.2"`. Use Packagist, with no
    nterchange VCS or local-path repository override. In an isolated source and
    dependency tree, run `composer update nonfiction/nterchange --no-plugins
    --no-scripts --prefer-dist` and review the generated lockfile. Preserve

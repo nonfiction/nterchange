@@ -1,7 +1,7 @@
 <?php
 // Composer loads the runtime without starting sessions or configuring a site.
 define('NTERCHANGE_DIR', __DIR__);
-define('NTERCHANGE_VERSION', '5.0.1');
+define('NTERCHANGE_VERSION', '5.0.2');
 if (!defined('SMARTY_DIR')) define('SMARTY_DIR', __DIR__ . '/vendor/Smarty/libs/');
 if (!defined('PEAR_DIR')) define('PEAR_DIR', __DIR__ . '/compat/pear');
 

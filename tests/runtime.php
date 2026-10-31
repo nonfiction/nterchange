@@ -32,7 +32,7 @@ function removeFixture($path) {
 }
 register_shutdown_function(function () use ($work) { removeFixture($work); });
 
-same('5.0.1', NTERCHANGE_VERSION);
+same('5.0.2', NTERCHANGE_VERSION);
 same(PHP_SESSION_NONE, session_status());
 foreach (['NObject', 'NController', 'NModel', 'NDate', 'NQuickForm', 'NView', 'ControllerForm', 'PageController', 'UsersController', 'AuditTrailController'] as $class) {
     same(true, class_exists($class));

@@ -5,6 +5,15 @@ fixture. PHP probes had no external network. MySQL used an internal Docker
 network, no published ports and disposable tmpfs data. No existing site
 container, database, upload directory or session was used.
 
+## Download rendering
+
+`php tests/filesystem-downloads.php` exercises actual filesystem helpers, PNG
+dimensions and NView/Smarty rendering on PHP 8.5.12. Fifteen checks cover known
+and default icons, static and instance calls, relative/absolute files, missing
+files, filesize/download-time modifiers and complete cold/warm template output.
+Only owned temporary files are used. No site configuration, session, database,
+HTTP or mail is involved. Legacy Smarty deprecations remain visible on stderr.
+
 ## Add New Content insert rejection
 
 `php tests/page-content-insert.php` exercises the actual controller and

@@ -122,7 +122,7 @@ class NFilesystem {
 	 * @param	array	A path to a filename.
 	 * @return	string	An img tag with a particular image for the filetype passed.
 	 **/
-	function download_icon($params) {
+	static function download_icon($params) {
 		$extension = NFilesystem::getExtension($params['file']);
 		$icon = '/images/icons/' . $extension . '.png';
 		$icon_path = DOCUMENT_ROOT . $icon;

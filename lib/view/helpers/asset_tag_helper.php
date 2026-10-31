@@ -32,7 +32,7 @@ class AssetTagHelper extends TagHelper {
 	}
 	*/
 
-	function imageTag($src, $alt='', $options=array()) {
+	static function imageTag($src, $alt='', $options=array()) {
 		if (is_file($_SERVER['DOCUMENT_ROOT'] . $src)) {
 			$file = $_SERVER['DOCUMENT_ROOT'] . $src;
 		} else if (is_file(BASE_DIR . $src)) {
